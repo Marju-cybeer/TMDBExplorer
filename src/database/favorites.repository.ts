@@ -1,3 +1,4 @@
+import * as SQLite from "expo-sqlite";
 import { db } from "./index";
 
 export interface FavoriteMovie {
@@ -10,7 +11,7 @@ export interface FavoriteMovie {
 
 export function addFavorite(movie: FavoriteMovie) {
   return new Promise<void>((resolve, reject) => {
-    db.transaction((tx) => {
+    db.transaction((tx: SQLite.SQLTransaction) => {
       tx.executeSql(
         `
         INSERT OR REPLACE INTO favorites
@@ -25,8 +26,8 @@ export function addFavorite(movie: FavoriteMovie) {
           movie.releaseDate,
           new Date().toISOString(),
         ],
-        () => resolve(),
-        (_, error) => {
+        (_tx: SQLite.SQLTransaction) => resolve(),
+        (_tx: SQLite.SQLTransaction, error: SQLite.SQLError) => {
           reject(error);
           return false;
         }
@@ -37,12 +38,12 @@ export function addFavorite(movie: FavoriteMovie) {
 
 export function removeFavorite(id: number) {
   return new Promise<void>((resolve, reject) => {
-    db.transaction((tx) => {
+    db.transaction((tx: SQLite.SQLTransaction) => {
       tx.executeSql(
         `DELETE FROM favorites WHERE id = ?`,
         [id],
-        () => resolve(),
-        (_, error) => {
+        (_tx: SQLite.SQLTransaction) => resolve(),
+        (_tx: SQLite.SQLTransaction, error: SQLite.SQLError) => {
           reject(error);
           return false;
         }
@@ -53,12 +54,15 @@ export function removeFavorite(id: number) {
 
 export function getFavorites() {
   return new Promise<FavoriteMovie[]>((resolve, reject) => {
-    db.transaction((tx) => {
+    db.transaction((tx: SQLite.SQLTransaction) => {
       tx.executeSql(
         `SELECT * FROM favorites ORDER BY createdAt DESC`,
         [],
-        (_, result) => resolve(result.rows._array),
-        (_, error) => {
+        (
+          _tx: SQLite.SQLTransaction,
+          result: SQLite.SQLResultSet
+        ) => resolve(result.rows._array),
+        (_tx: SQLite.SQLTransaction, error: SQLite.SQLError) => {
           reject(error);
           return false;
         }
@@ -69,11 +73,14 @@ export function getFavorites() {
 
 export function isFavorite(id: number) {
   return new Promise<boolean>((resolve) => {
-    db.transaction((tx) => {
+    db.transaction((tx: SQLite.SQLTransaction) => {
       tx.executeSql(
         `SELECT id FROM favorites WHERE id = ?`,
         [id],
-        (_, result) => resolve(result.rows.length > 0)
+        (
+          _tx: SQLite.SQLTransaction,
+          result: SQLite.SQLResultSet
+        ) => resolve(result.rows.length > 0)
       );
     });
   });
