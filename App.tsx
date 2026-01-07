@@ -6,9 +6,9 @@ import { ThemeProvider } from "./src/context/ThemeContext";
 import { useEffect } from "react";
 import { initDatabase } from "./src/database";
 
-/* useEffect(() => {
+ useEffect(() => {
   initDatabase();
-}, []); */
+}, []); 
 
 
 
