@@ -1,6 +1,7 @@
+import { Theme } from "./theme";
 import { palette } from "./colors";
 
-export const darkTheme = {
+export const darkTheme: Theme = {
+  mode: "dark",
   colors: palette.dark,
-  mode: "dark" as const,
 };

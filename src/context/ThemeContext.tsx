@@ -1,11 +1,9 @@
 import { createContext, useEffect, useState } from "react";
-import { themes } from "../theme/theme";
+import { themes, Theme, ThemeMode } from "../theme/theme";
 import { loadTheme, saveTheme } from "../utils/storage";
 
-type ThemeMode = "light" | "dark";
-
 interface ThemeContextData {
-  theme: typeof themes.light;
+  theme: Theme;          // ✅ CORRETO
   mode: ThemeMode;
   toggleTheme: () => void;
 }
@@ -22,7 +20,7 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   function toggleTheme() {
-    const newTheme = mode === "dark" ? "light" : "dark";
+    const newTheme: ThemeMode = mode === "dark" ? "light" : "dark";
     setMode(newTheme);
     saveTheme(newTheme);
   }
@@ -31,7 +29,7 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     <ThemeContext.Provider
       value={{
         mode,
-        theme: themes[mode],
+        theme: themes[mode], // ✅ agora é compatível
         toggleTheme,
       }}
     >
