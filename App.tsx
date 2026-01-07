@@ -3,6 +3,14 @@ import { StyleSheet, Text, View } from 'react-native';
 import { RootNavigator } from "./src/navigation/RootNavigator";
 import { AuthProvider } from "./src/store/auth.store";
 import { ThemeProvider } from "./src/store/theme.store";
+import { useEffect } from "react";
+import { initDatabase } from "./src/database";
+
+useEffect(() => {
+  initDatabase();
+}, []);
+
+
 
 export default function App() {
   return (
