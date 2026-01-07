@@ -1,9 +1,10 @@
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
-import { useAuth } from "../store/auth.store";
+import { useAuth } from "../hooks/useAuth";
+
 import { useThemeStyles } from "../theme/useThemeStyles";
 
 export default function LoginScreen() {
-  const { login } = useAuth();
+  const { signIn } = useAuth();
   const { colors } = useThemeStyles();
 
   return (
@@ -14,7 +15,7 @@ export default function LoginScreen() {
 
       <TouchableOpacity
         style={[styles.button, { backgroundColor: colors.primary }]}
-        onPress={login}
+        onPress={signIn}
       >
         <Text style={styles.buttonText}>Entrar</Text>
       </TouchableOpacity>
