@@ -1,6 +1,5 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Ionicons } from "@expo/vector-icons";
-import { RouteProp } from "@react-navigation/native";
 
 import HomeScreen from "../screens/HomeScreen";
 import SearchScreen from "../screens/SearchScreen";
@@ -15,11 +14,7 @@ export function AppTabs() {
 
   return (
     <Tab.Navigator
-      screenOptions={({
-        route,
-      }: {
-        route: RouteProp<TabParamList, keyof TabParamList>;
-      }) => ({
+      screenOptions={({ route }) => ({
         headerShown: false,
         tabBarStyle: {
           backgroundColor: colors.surface,
