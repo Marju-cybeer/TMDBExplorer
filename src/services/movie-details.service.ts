@@ -1,5 +1,6 @@
 import { api } from "./api";
 
+
 export async function getMovieDetails(movieId: number) {
   const { data } = await api.get(`/movie/${movieId}`);
   return data;
