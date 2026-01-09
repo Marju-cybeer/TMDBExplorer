@@ -1,6 +1,4 @@
-import { ScrollView } from "react-native";
 import { useState } from "react";
-
 import { useHomeMovies } from "../hooks/useHomeMovies";
 import { MovieCarousel } from "../components/MovieCarousel";
 import { MovieList } from "../components/MovieList";
@@ -24,14 +22,15 @@ export default function HomeScreen() {
   };
 
   return (
-    <ScrollView>
-      <HomeHeader />
-
-      <MovieCarousel movies={data.nowPlaying.slice(0, 5)} />
-
-      <HomeTabs active={activeTab} onChange={setActiveTab} />
-
-      <MovieList movies={moviesMap[activeTab]} />
-    </ScrollView>
+    <MovieList
+      movies={moviesMap[activeTab]}
+      ListHeaderComponent={
+        <>
+          <HomeHeader />
+          <MovieCarousel movies={data.nowPlaying.slice(0, 5)} />
+          <HomeTabs active={activeTab} onChange={setActiveTab} />
+        </>
+      }
+    />
   );
 }
