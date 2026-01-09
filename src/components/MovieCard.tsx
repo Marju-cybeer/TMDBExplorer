@@ -65,12 +65,13 @@ export function MovieCard({ movie, onPress }: Props) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    marginBottom: 12,
+    marginHorizontal: 6,   // 👈 espaçamento lateral entre cartazes
+    marginBottom: 16,      // 👈 espaço vertical (igual Figma)
   },
   image: {
     width: "100%",
     aspectRatio: 2 / 3,
-    borderRadius: 12,
+    borderRadius: 14,
   },
   title: {
     marginTop: 6,
