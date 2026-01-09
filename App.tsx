@@ -1,18 +1,15 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
-import { RootNavigator } from "./src/navigation/RootNavigator";
-import { AuthProvider } from "./src/context/AuthContext";
-import { ThemeProvider } from "./src/context/ThemeContext";
 import { useEffect } from "react";
+import { ThemeProvider } from "./src/context/ThemeContext";
+import { AuthProvider } from "./src/context/AuthContext";
+import { RootNavigator } from "./src/navigation/RootNavigator";
+
 import { initDatabase } from "./src/database";
 
- useEffect(() => {
-  initDatabase();
-}, []); 
-
-
-
 export default function App() {
+  useEffect(() => {
+    initDatabase();
+  }, []);
+
   return (
     <AuthProvider>
       <ThemeProvider>
@@ -21,12 +18,3 @@ export default function App() {
     </AuthProvider>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
