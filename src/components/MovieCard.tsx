@@ -64,16 +64,19 @@ export function MovieCard({ movie, onPress }: Props) {
 
 const styles = StyleSheet.create({
   container: {
-    marginRight: 12,
+    flex: 1,
+    marginBottom: 12,
   },
   image: {
     width: "100%",
-    height: 180,
+    aspectRatio: 2 / 3,
+    borderRadius: 12,
   },
   title: {
     marginTop: 6,
-    fontWeight: "500",
+    fontSize: 13,
   },
+
   ratingRow: {
     flexDirection: "row",
     alignItems: "center",
