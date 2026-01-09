@@ -40,9 +40,9 @@ export function MovieList({
       marginBottom: spacing.md,
     }}
 
-    initialNumToRender={10}
-    maxToRenderPerBatch={10}
-    windowSize={5}
+    initialNumToRender={9}
+    maxToRenderPerBatch={9}
+    windowSize={6}
     removeClippedSubviews
 
     contentContainerStyle={{
