@@ -1,13 +1,8 @@
-import { FlatList, Image, StyleSheet, Dimensions } from "react-native";
-import { Movie } from "../types/movie";
+import { FlatList, Dimensions, Image, StyleSheet } from "react-native";
 
 const { width } = Dimensions.get("window");
 
-interface Props {
-  movies: Movie[];
-}
-
-export function MovieCarousel({ movies }: Props) {
+export function MovieCarousel({ movies }) {
   return (
     <FlatList
       data={movies}
@@ -30,6 +25,6 @@ export function MovieCarousel({ movies }: Props) {
 const styles = StyleSheet.create({
   image: {
     width,
-    height: 200,
+    height: 220,
   },
 });
