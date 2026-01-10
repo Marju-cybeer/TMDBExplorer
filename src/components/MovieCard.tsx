@@ -1,4 +1,6 @@
 import { View, Image, Text, StyleSheet, TouchableOpacity } from "react-native";
+import { Ionicons } from "@expo/vector-icons";
+
 import { Movie } from "../types/movie";
 import { useThemeStyles } from "../theme/useThemeStyles";
 
@@ -8,35 +10,83 @@ interface Props {
 }
 
 export function MovieCard({ movie, onPress }: Props) {
-  const { colors } = useThemeStyles();
+  const { colors, spacing, radius, typography } = useThemeStyles();
 
   return (
-    <TouchableOpacity onPress={onPress} style={styles.container}>
+    <TouchableOpacity
+      onPress={onPress}
+      style={[styles.container, { width: 120 }]}
+      activeOpacity={0.8}
+    >
       <Image
         source={{
           uri: `https://image.tmdb.org/t/p/w500${movie.poster_path}`,
         }}
-        style={styles.image}
+        style={[styles.image, { borderRadius: radius.md }]}
       />
-      <Text style={[styles.title, { color: colors.text }]} numberOfLines={1}>
+
+      <Text
+        style={[
+          styles.title,
+          {
+            color: colors.text,
+            fontSize: typography.small,
+          },
+        ]}
+        numberOfLines={2}
+      >
         {movie.title}
       </Text>
+
+      <View style={styles.ratingRow}>
+        <Ionicons name="star" size={12} color="#F5C518" />
+        <Text
+          style={[
+            styles.rating,
+            { color: colors.muted, fontSize: typography.small },
+          ]}
+        >
+          {movie.vote_average.toFixed(1)}
+        </Text>
+
+        <Text
+          style={[
+            styles.year,
+            { color: colors.muted, fontSize: typography.small },
+          ]}
+        >
+          • {movie.release_date?.split("-")[0]}
+        </Text>
+      </View>
     </TouchableOpacity>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    width: 120,
-    marginRight: 12,
+    flex: 1,
+    marginHorizontal: 6,   // 👈 espaçamento lateral entre cartazes
+    marginBottom: 16,      // 👈 espaço vertical (igual Figma)
   },
   image: {
     width: "100%",
-    height: 180,
-    borderRadius: 12,
+    aspectRatio: 2 / 3,
+    borderRadius: 14,
   },
   title: {
     marginTop: 6,
     fontSize: 13,
+  },
+
+  ratingRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginTop: 4,
+  },
+  rating: {
+    marginLeft: 4,
+  },
+  year: {
+    marginLeft: 6,
   },
 });
