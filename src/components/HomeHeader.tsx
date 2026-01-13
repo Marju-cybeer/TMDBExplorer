@@ -1,7 +1,7 @@
-import { View, Text, TextInput, StyleSheet } from "react-native";
-import { Ionicons } from "@expo/vector-icons";
+import { View, Text, StyleSheet } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useThemeStyles } from "../theme/useThemeStyles";
+import { SearchInput } from "./SearchInput";
 
 export function HomeHeader() {
   const { colors, spacing, typography } = useThemeStyles();
@@ -9,10 +9,12 @@ export function HomeHeader() {
   return (
     <SafeAreaView
       edges={["top"]}
-      style={[styles.safe, { backgroundColor: colors.surface }]}
+      style={[styles.safe, { backgroundColor: colors.background }]}
     >
       <View style={styles.container}>
         <Text
+          numberOfLines={1}          // 🔥 evita quebra de linha
+          adjustsFontSizeToFit       // 🔥 adapta em telas menores
           style={[
             styles.title,
             {
@@ -24,23 +26,16 @@ export function HomeHeader() {
           What do you want to watch?
         </Text>
 
-        <View
-          style={[
-            styles.searchBox,
-            { backgroundColor: colors.background },
-          ]}
-        >
-          <Ionicons name="search" size={18} color={colors.muted} />
-          <TextInput
-            placeholder="Search"
-            placeholderTextColor={colors.muted}
-            style={[styles.input, { color: colors.text }]}
-          />
-        </View>
+        <SearchInput
+          value=""
+          onChangeText={() => {}}
+          placeholder="Search"
+        />
       </View>
     </SafeAreaView>
   );
 }
+
 
 const styles = StyleSheet.create({
   safe: {

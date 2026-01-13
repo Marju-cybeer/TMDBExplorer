@@ -8,8 +8,7 @@ export const palette = {
   },
   dark: {
      background: "#0F1C26",
-    surface: "#1B2A34",
-    surface2: "#243844",
+     surface: "#243844",
 
     text: "#FFFFFF",
     textSecondary: "#AAB4BD",
