@@ -7,10 +7,17 @@ export const palette = {
     muted: "#9E9E9E",
   },
   dark: {
-    background: "#0E1A24", // azul petróleo
-    surface: "#1C2A35",    // cinza carvão
+     background: "#0F1C26",
+     surface: "#243844",
+
     text: "#FFFFFF",
-    primary: "#4FC3F7",    // azul claro
-    muted: "#90A4AE",
+    textSecondary: "#AAB4BD",
+    muted: "#6C7A86",
+
+    primary: "#2F80ED",
+    warning: "#F2C94C",
+
+    border: "#243844",
+    tabBar: "#16222C",
   },
 };

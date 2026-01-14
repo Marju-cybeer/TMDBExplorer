@@ -1,8 +1,9 @@
+import { StatusBar } from "expo-status-bar";
 import { useEffect } from "react";
+
 import { ThemeProvider } from "./src/context/ThemeContext";
 import { AuthProvider } from "./src/context/AuthContext";
 import { RootNavigator } from "./src/navigation/RootNavigator";
-
 import { initDatabase } from "./src/database";
 
 export default function App() {
@@ -11,13 +12,9 @@ export default function App() {
   }, []);
 
   return (
-    <View style={styles.container}>
-      <Text>Open up App.tsx to start working on your app!</Text>
-      <StatusBar style="light" backgroundColor="#0F1C26" />
-
-    </View>
     <AuthProvider>
       <ThemeProvider>
+        <StatusBar style="light" backgroundColor="#0F1C26" />
         <RootNavigator />
       </ThemeProvider>
     </AuthProvider>

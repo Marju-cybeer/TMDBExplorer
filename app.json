@@ -10,7 +10,7 @@
     "splash": {
       "image": "./assets/popcorn.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#0f1c26"
     },
     "ios": {
       "supportsTablet": true
@@ -18,7 +18,7 @@
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/popcorn.png",
-        "backgroundColor": "#ffffff"
+        "backgroundColor": "#0f1c26"
       }
     },
     "web": {

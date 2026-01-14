@@ -2,7 +2,7 @@ import { View, TextInput, StyleSheet } from "react-native";
 import { Feather } from "@expo/vector-icons";
 import { useThemeStyles } from "../theme/useThemeStyles";
 
-interface Props {
+type Props = {
   value: string;
   onChange: (text: string) => void;
   placeholder?: string;

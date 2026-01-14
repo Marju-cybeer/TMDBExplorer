@@ -12,7 +12,7 @@ export default function SearchScreen() {
 
   return (
     <View style={{ flex: 1, padding: 16 }}>
-      <SearchInput value={query} onChange={setQuery} />
+      <SearchInput value={query} onChangeText={setQuery} />
 
       <FlatList
         data={movies}

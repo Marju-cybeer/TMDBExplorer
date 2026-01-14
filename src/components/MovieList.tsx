@@ -15,7 +15,7 @@ export function MovieList({
   onPressMovie,
   ListHeaderComponent,
 }: Props) {
-  const { spacing } = useThemeStyles();
+  const { spacing, colors } = useThemeStyles();
 
   const renderItem = useCallback(
     ({ item }: { item: Movie }) => (
@@ -48,6 +48,7 @@ export function MovieList({
     contentContainerStyle={{
       paddingHorizontal: spacing.md,
       paddingBottom: spacing.xl,
+      backgroundColor: colors.background,
     }}
     showsVerticalScrollIndicator={false}
   />
