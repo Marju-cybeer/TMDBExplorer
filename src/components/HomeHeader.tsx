@@ -1,10 +1,13 @@
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, TextInput, StyleSheet, TouchableOpacity } from "react-native";
+import { Ionicons } from "@expo/vector-icons";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { useNavigation } from "@react-navigation/native";
 import { useThemeStyles } from "../theme/useThemeStyles";
 import { SearchInput } from "./SearchInput";
 
 export function HomeHeader() {
-  const { colors, spacing, typography } = useThemeStyles();
+  const { colors, typography } = useThemeStyles();
+  const navigation = useNavigation<any>();
 
   return (
     <SafeAreaView
@@ -26,11 +29,20 @@ export function HomeHeader() {
           What do you want to watch?
         </Text>
 
-        <SearchInput
-          value=""
-          onChangeText={() => {}}
-          placeholder="Search"
-        />
+        {/* Campo fake que navega */}
+        <TouchableOpacity
+          activeOpacity={0.8}
+          onPress={() => navigation.navigate("Search")}
+          style={[
+            styles.searchBox,
+            { backgroundColor: colors.background },
+          ]}
+        >
+          <Ionicons name="search" size={18} color={colors.muted} />
+          <Text style={[styles.placeholder, { color: colors.muted }]}>
+            Search
+          </Text>
+        </TouchableOpacity>
       </View>
     </SafeAreaView>
   );
@@ -61,4 +73,9 @@ const styles = StyleSheet.create({
     flex: 1,
     fontSize: 14,
   },
+  placeholder: {
+  marginLeft: 8,
+  fontSize: 14,
+}
+
 });

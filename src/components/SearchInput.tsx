@@ -4,26 +4,26 @@ import { useThemeStyles } from "../theme/useThemeStyles";
 
 type Props = {
   value: string;
-  onChangeText: (text: string) => void;
+  onChange: (text: string) => void;
   placeholder?: string;
-};
+}
 
-export function SearchInput({ value, onChangeText, placeholder }: Props) {
+export function SearchInput({ value, onChange, placeholder }: Props) {
   const { colors } = useThemeStyles();
 
   return (
     <View
       style={[
         styles.container,
-        { backgroundColor: colors.surface},
+        { backgroundColor: colors.surface },
       ]}
     >
       <TextInput
-        style={[styles.input, { color: colors.text }]}
-        placeholder={placeholder ?? "Search"}
-        placeholderTextColor={colors.muted}
         value={value}
-        onChangeText={onChangeText}
+        onChangeText={onChange}
+        placeholder={placeholder ?? "Buscar filmes"}
+        placeholderTextColor={colors.muted}
+        style={[styles.input, { color: colors.text }]}
       />
 
       <Feather
@@ -34,17 +34,16 @@ export function SearchInput({ value, onChangeText, placeholder }: Props) {
     </View>
   );
 }
-
 const styles = StyleSheet.create({
   container: {
-    height: 44,
-    borderRadius: 12,
+    height: 48,
+    borderRadius: 14,
     paddingHorizontal: 14,
     flexDirection: "row",
     alignItems: "center",
   },
   input: {
-    flex: 1,            // 🔥 empurra o ícone para a direita
+    flex: 1, // 🔥 empurra o ícone para a direita
     fontSize: 14,
   },
 });
