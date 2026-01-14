@@ -4,11 +4,11 @@ import { useThemeStyles } from "../theme/useThemeStyles";
 
 type Props = {
   value: string;
-  onChange: (text: string) => void;
+  onChangeText: (text: string) => void;
   placeholder?: string;
 }
 
-export function SearchInput({ value, onChange, placeholder }: Props) {
+export function SearchInput({ value, onChangeText, placeholder }: Props) {
   const { colors } = useThemeStyles();
 
   return (
@@ -20,7 +20,7 @@ export function SearchInput({ value, onChange, placeholder }: Props) {
     >
       <TextInput
         value={value}
-        onChangeText={onChange}
+        onChangeText={onChangeText}
         placeholder={placeholder ?? "Buscar filmes"}
         placeholderTextColor={colors.muted}
         style={[styles.input, { color: colors.text }]}

@@ -35,7 +35,7 @@ export function HomeHeader() {
           onPress={() => navigation.navigate("Search")}
           style={[
             styles.searchBox,
-            { backgroundColor: colors.background },
+            { backgroundColor: colors.surface },
           ]}
         >
           <Ionicons name="search" size={18} color={colors.muted} />
