@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
-import { FlatList, View } from "react-native";
+import { FlatList, View, ActivityIndicator } from "react-native";
 import {
   useNavigation,
   useRoute,
@@ -18,34 +18,27 @@ export default function SearchScreen() {
   const route = useRoute<any>();
   const { colors } = useThemeStyles();
 
-  // 🔥 query inicial vinda da Home
   const initialQuery = route.params?.query ?? "";
-
   const [query, setQuery] = useState(initialQuery);
   const { movies, loading } = useSearchMovies(query);
 
-  // 🔄 atualiza se vier nova query pela navegação
   useEffect(() => {
     if (initialQuery) {
       setQuery(initialQuery);
     }
   }, [initialQuery]);
 
-  // 🧹 limpa o input ao sair da tela
   useFocusEffect(
     useCallback(() => {
-      return () => {
-        setQuery("");
-      };
+      return () => setQuery("");
     }, [])
   );
 
   return (
     <View style={{ flex: 1, backgroundColor: colors.background }}>
-      {/* 🔝 Header igual ao Figma */}
       <SearchHeader />
 
-      <View style={{ padding: 16 }}>
+      <View style={{ padding: 16, flex: 1 }}>
         <SearchInput
           value={query}
           onChangeText={setQuery}
@@ -53,26 +46,40 @@ export default function SearchScreen() {
           returnKeyType="search"
         />
 
-        {/* 🔎 estado vazio */}
-        {!loading && query.length > 0 && movies.length === 0 && (
-          <EmptyState />
+        {/* 🔄 Loading */}
+        {loading && (
+          <View style={{ marginTop: 32 }}>
+            <ActivityIndicator size="large" />
+          </View>
         )}
 
-        <FlatList
-          data={movies}
-          keyExtractor={(item) => item.id.toString()}
-          contentContainerStyle={{ marginTop: 16, paddingBottom: 24 }}
-          renderItem={({ item }) => (
-            <SearchMovieRow
-              movie={item}
-              onPress={() =>
-                navigation.navigate("MovieDetails", {
-                  movieId: item.id,
-                })
-              }
-            />
-          )}
-        />
+        {/* 🔎 Estado vazio da busca */}
+        {!loading && query.length > 0 && movies.length === 0 && (
+          <EmptyState
+            icon="search-outline"
+            title="We Are Sorry, We Can Not Find The Movie :("
+            subtitle="Find your movie by Type title, categories, years, etc."
+          />
+        )}
+
+        {/* 📃 Lista de resultados */}
+        {!loading && movies.length > 0 && (
+          <FlatList
+            data={movies}
+            keyExtractor={(item) => item.id.toString()}
+            contentContainerStyle={{ marginTop: 16, paddingBottom: 24 }}
+            renderItem={({ item }) => (
+              <SearchMovieRow
+                movie={item}
+                onPress={() =>
+                  navigation.navigate("MovieDetails", {
+                   movieId: movie.id,
+                  })
+                }
+              />
+            )}
+          />
+        )}
       </View>
     </View>
   );

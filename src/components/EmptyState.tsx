@@ -2,26 +2,40 @@ import { View, Text, StyleSheet } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { useThemeStyles } from "../theme/useThemeStyles";
 
-export function EmptyState() {
+type EmptyStateProps = {
+  icon?: keyof typeof Ionicons.glyphMap;
+  title: string;
+  subtitle?: string;
+};
+
+export function EmptyState({
+  icon = "alert-circle-outline",
+  title,
+  subtitle,
+}: EmptyStateProps) {
   const { colors } = useThemeStyles();
 
   return (
     <View style={styles.container}>
-      <Ionicons name="search-outline" size={72} color={colors.muted} />
+      <Ionicons name={icon} size={72} color={colors.muted} />
+
       <Text style={[styles.title, { color: colors.text }]}>
-        We Are Sorry, We Can Not Find The Movie :(
+        {title}
       </Text>
-      <Text style={[styles.subtitle, { color: colors.muted }]}>
-        Find your movie by Type title, categories, years, etc.
-      </Text>
+
+      {subtitle && (
+        <Text style={[styles.subtitle, { color: colors.muted }]}>
+          {subtitle}
+        </Text>
+      )}
     </View>
   );
 }
-
 const styles = StyleSheet.create({
   container: {
+    flex: 1,
+    justifyContent: "center",
     alignItems: "center",
-    marginTop: 80,
     paddingHorizontal: 24,
   },
   title: {

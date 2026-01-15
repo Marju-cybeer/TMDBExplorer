@@ -6,6 +6,7 @@ import { AuthStack } from "./AuthStack";
 import { AppTabs } from "./AppTabs";
 import { Loading } from "../components/Loading";
 import SearchScreen from "../screens/SearchScreen";
+import MovieDetailsScreen from "../screens/MovieDetailsScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -23,7 +24,10 @@ export function RootNavigator() {
           <>
             {/* Tabs principais */}
             <Stack.Screen name="App" component={AppTabs} />
-
+             <Stack.Screen
+             name="MovieDetails"
+             component={MovieDetailsScreen}
+  />
             {/* 🔍 Search fora das tabs */}
             <Stack.Screen
               name="Search"

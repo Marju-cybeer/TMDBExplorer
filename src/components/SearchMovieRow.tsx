@@ -2,6 +2,7 @@ import { View, Text, Image, StyleSheet, TouchableOpacity } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { Movie } from "../types/movie";
 import { useThemeStyles } from "../theme/useThemeStyles";
+import { useNavigation } from "@react-navigation/native";
 
 interface Props {
   movie: Movie;
@@ -10,9 +11,15 @@ interface Props {
 
 export function SearchMovieRow({ movie, onPress }: Props) {
   const { colors, typography, radius } = useThemeStyles();
+  const navigation = useNavigation<any>();
 
   return (
-    <TouchableOpacity style={styles.container} onPress={onPress}>
+    <TouchableOpacity style={styles.container} 
+ onPress={() =>
+        navigation.getParent()?.navigate("MovieDetails", {
+          movieId: movie.id,
+        })
+      }>
       <Image
         source={{
           uri: `https://image.tmdb.org/t/p/w500${movie.poster_path}`,

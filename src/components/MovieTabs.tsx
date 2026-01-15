@@ -12,20 +12,42 @@ export function MovieTabs({ movie }: any) {
   return (
     <Tab.Navigator
       screenOptions={{
-        tabBarStyle: { backgroundColor: colors.surface },
-        tabBarIndicatorStyle: { backgroundColor: colors.primary },
-        tabBarLabelStyle: { fontWeight: "600" },
+        tabBarStyle: {
+          backgroundColor: colors.surface,
+          elevation: 0,
+        },
+        tabBarIndicatorStyle: {
+          backgroundColor: colors.primary,
+          height: 3,
+          borderRadius: 3,
+        },
+        tabBarLabelStyle: {
+          fontWeight: "700",
+          fontSize: 13,
+          textTransform: "none",
+        },
+        tabBarActiveTintColor: colors.primary,
+        tabBarInactiveTintColor: colors.muted,
+        tabBarPressColor: "transparent",
+        tabBarItemStyle: {
+          height: 48,
+        },
       }}
     >
-      <Tab.Screen name="About">
-        {() => <AboutTab overview={movie.overview} />}
-      </Tab.Screen>
-      <Tab.Screen name="Reviews">
-        {() => <ReviewsTab movieId={movie.id} />}
-      </Tab.Screen>
-      <Tab.Screen name="Cast">
-        {() => <CastTab movieId={movie.id} />}
-      </Tab.Screen>
+      <Tab.Screen
+        name="About"
+        children={() => <AboutTab overview={movie.overview} />}
+      />
+
+      <Tab.Screen
+        name="Reviews"
+        children={() => <ReviewsTab movieId={movie.id} />}
+      />
+
+      <Tab.Screen
+        name="Cast"
+        children={() => <CastTab movieId={movie.id} />}
+      />
     </Tab.Navigator>
   );
 }
