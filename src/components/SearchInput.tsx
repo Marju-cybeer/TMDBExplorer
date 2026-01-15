@@ -1,37 +1,49 @@
-import { TextInput, StyleSheet } from "react-native";
+import { View, TextInput, StyleSheet } from "react-native";
+import { Feather } from "@expo/vector-icons";
 import { useThemeStyles } from "../theme/useThemeStyles";
 
-interface Props {
+type Props = {
   value: string;
-  onChange: (text: string) => void;
+  onChangeText: (text: string) => void;
+  placeholder?: string;
 }
 
-export function SearchInput({ value, onChange }: Props) {
+export function SearchInput({ value, onChangeText, placeholder }: Props) {
   const { colors } = useThemeStyles();
 
   return (
-    <TextInput
-      value={value}
-      onChangeText={onChange}
-      placeholder="Buscar filmes..."
-      placeholderTextColor={colors.muted}
+    <View
       style={[
-        styles.input,
-        {
-          backgroundColor: colors.surface,
-          color: colors.text,
-          borderColor: colors.muted,
-        },
+        styles.container,
+        { backgroundColor: colors.surface },
       ]}
-    />
+    >
+      <TextInput
+        value={value}
+        onChangeText={onChangeText}
+        placeholder={placeholder ?? "Buscar filmes"}
+        placeholderTextColor={colors.muted}
+        style={[styles.input, { color: colors.text }]}
+      />
+
+      <Feather
+        name="search"
+        size={18}
+        color={colors.muted}
+      />
+    </View>
   );
 }
-
 const styles = StyleSheet.create({
-  input: {
+  container: {
     height: 48,
-    borderRadius: 12,
-    paddingHorizontal: 16,
-    borderWidth: 1,
+    borderRadius: 14,
+    paddingHorizontal: 14,
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  input: {
+    flex: 1, // 🔥 empurra o ícone para a direita
+    fontSize: 14,
   },
 });

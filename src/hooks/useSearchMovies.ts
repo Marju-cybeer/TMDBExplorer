@@ -7,20 +7,24 @@ export function useSearchMovies(query: string) {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    const handler = setTimeout(async () => {
-      if (!query) {
-        setMovies([]);
-        return;
-      }
+    // 🔥 evita busca com string vazia ou só espaços
+    if (!query.trim()) {
+      setMovies([]);
+      return;
+    }
 
+    const handler = setTimeout(async () => {
       try {
         setLoading(true);
-        const result = await searchMovies(query);
+        const result = await searchMovies(query.trim());
         setMovies(result);
+      } catch (error) {
+        console.error("Erro ao buscar filmes:", error);
+        setMovies([]);
       } finally {
         setLoading(false);
       }
-    }, 500); // debounce 500ms
+    }, 500); // debounce
 
     return () => clearTimeout(handler);
   }, [query]);

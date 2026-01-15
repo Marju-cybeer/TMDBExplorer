@@ -8,13 +8,16 @@ import { SearchMovieRow } from "../components/SearchMovieRow";
 import { EmptyState } from "../components/EmptyState";
 
 export default function SearchScreen() {
+  const route = useRoute<any>();
+  const navigation = useNavigation<any>();
+
   const [query, setQuery] = useState("");
   const { movies, loading } = useSearchMovies(query);
   const navigation: any = useNavigation();
 
   return (
     <View style={{ flex: 1, padding: 16 }}>
-      <SearchInput value={query} onChange={setQuery} />
+      <SearchInput value={query} onChangeText={setQuery} />
 
       {/* 🔎 Estado vazio (quando digitou e não achou nada) */}
       {!loading && query.length > 0 && movies.length === 0 && (
@@ -29,9 +32,7 @@ export default function SearchScreen() {
           <SearchMovieRow
             movie={item}
             onPress={() =>
-              navigation.navigate("MovieDetails", {
-                movieId: item.id,
-              })
+              navigation.navigate("MovieDetails", { movieId: item.id })
             }
           />
         )}
