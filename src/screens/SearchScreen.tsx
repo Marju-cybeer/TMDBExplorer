@@ -1,43 +1,40 @@
-import { View, FlatList, TouchableOpacity } from "react-native";
-import { useEffect, useState } from "react";
-import { useRoute, useNavigation } from "@react-navigation/native";
+import { useState } from "react";
+import { FlatList, View } from "react-native";
+import { useNavigation } from "@react-navigation/native";
 
 import { SearchInput } from "../components/SearchInput";
 import { useSearchMovies } from "../hooks/useSearchMovies";
-import { MovieCard } from "../components/MovieCard";
+import { SearchMovieRow } from "../components/SearchMovieRow";
+import { EmptyState } from "../components/EmptyState";
 
 export default function SearchScreen() {
   const route = useRoute<any>();
   const navigation = useNavigation<any>();
 
   const [query, setQuery] = useState("");
-
-  // 🔥 recebe texto vindo da Home
-  useEffect(() => {
-    if (route.params?.initialQuery) {
-      setQuery(route.params.initialQuery);
-    }
-  }, [route.params]);
-
-  const { movies } = useSearchMovies(query);
+  const { movies, loading } = useSearchMovies(query);
+  const navigation: any = useNavigation();
 
   return (
     <View style={{ flex: 1, padding: 16 }}>
       <SearchInput value={query} onChangeText={setQuery} />
 
+      {/* 🔎 Estado vazio (quando digitou e não achou nada) */}
+      {!loading && query.length > 0 && movies.length === 0 && (
+        <EmptyState />
+      )}
+
       <FlatList
         data={movies}
         keyExtractor={(item) => item.id.toString()}
-        numColumns={3}
         contentContainerStyle={{ marginTop: 16 }}
         renderItem={({ item }) => (
-          <TouchableOpacity
+          <SearchMovieRow
+            movie={item}
             onPress={() =>
               navigation.navigate("MovieDetails", { movieId: item.id })
             }
-          >
-            <MovieCard movie={item} />
-          </TouchableOpacity>
+          />
         )}
       />
     </View>
