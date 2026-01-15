@@ -1,6 +1,6 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { FlatList, View } from "react-native";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useRoute } from "@react-navigation/native";
 
 import { SearchInput } from "../components/SearchInput";
 import { useSearchMovies } from "../hooks/useSearchMovies";
@@ -8,18 +8,17 @@ import { SearchMovieRow } from "../components/SearchMovieRow";
 import { EmptyState } from "../components/EmptyState";
 
 export default function SearchScreen() {
-  const route = useRoute<any>();
   const navigation = useNavigation<any>();
+  const route = useRoute<any>();
 
-  const [query, setQuery] = useState("");
+  const [query, setQuery] = useState(route.params?.query ?? "");
   const { movies, loading } = useSearchMovies(query);
-  const navigation: any = useNavigation();
 
   return (
     <View style={{ flex: 1, padding: 16 }}>
       <SearchInput value={query} onChangeText={setQuery} />
 
-      {/* 🔎 Estado vazio (quando digitou e não achou nada) */}
+      {/* 🔎 Estado vazio */}
       {!loading && query.length > 0 && movies.length === 0 && (
         <EmptyState />
       )}
@@ -32,7 +31,9 @@ export default function SearchScreen() {
           <SearchMovieRow
             movie={item}
             onPress={() =>
-              navigation.navigate("MovieDetails", { movieId: item.id })
+              navigation.navigate("MovieDetails", {
+                movieId: item.id,
+              })
             }
           />
         )}
