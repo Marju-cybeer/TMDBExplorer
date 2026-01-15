@@ -2,60 +2,73 @@ import { View, Text, TextInput, StyleSheet, TouchableOpacity } from "react-nativ
 import { Ionicons } from "@expo/vector-icons";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useNavigation } from "@react-navigation/native";
+import { useState } from "react";
 import { useThemeStyles } from "../theme/useThemeStyles";
-import { SearchInput } from "./SearchInput";
 
 export function HomeHeader() {
   const { colors, typography } = useThemeStyles();
   const navigation = useNavigation<any>();
+  const [query, setQuery] = useState("");
+
+  function handleSearch() {
+    if (!query.trim()) return;
+
+    navigation.navigate("Search", {
+      initialQuery: query,
+    });
+
+    setQuery(""); // 🔥 limpa o input da Home
+  }
 
   return (
-    <SafeAreaView
-      edges={["top"]}
-      style={[styles.safe, { backgroundColor: colors.background }]}
-    >
+    <SafeAreaView edges={["top"]} style={{ backgroundColor: colors.background }}>
       <View style={styles.container}>
         <Text
-          numberOfLines={1}          // 🔥 evita quebra de linha
-          adjustsFontSizeToFit       // 🔥 adapta em telas menores
+          numberOfLines={1}
+          adjustsFontSizeToFit
           style={[
             styles.title,
-            {
-              color: colors.text,
-              fontSize: typography.heading,
-            },
+            { color: colors.text, fontSize: typography.heading },
           ]}
         >
           What do you want to watch?
         </Text>
 
-        {/* Campo fake que navega */}
-        <TouchableOpacity
-          activeOpacity={0.8}
-          onPress={() => navigation.navigate("Search")}
+        <View
           style={[
             styles.searchBox,
             { backgroundColor: colors.surface },
           ]}
         >
-          <Ionicons name="search" size={18} color={colors.muted} />
-          <Text style={[styles.placeholder, { color: colors.muted }]}>
-            Search
-          </Text>
-        </TouchableOpacity>
+          <TextInput
+            value={query}
+            onChangeText={setQuery}
+            placeholder="Search"
+            placeholderTextColor={colors.muted}
+            style={[styles.input, { color: colors.text }]}
+            returnKeyType="search"
+            onSubmitEditing={handleSearch}
+          />
+
+          <TouchableOpacity onPress={handleSearch}>
+            <Ionicons name="search" size={20} color={colors.muted} />
+          </TouchableOpacity>
+        </View>
       </View>
     </SafeAreaView>
   );
 }
 
 
+
+
 const styles = StyleSheet.create({
   safe: {
-    paddingBottom: 16, // espaço antes do carrossel
+    paddingBottom: 16,
   },
   container: {
     paddingHorizontal: 16,
-    paddingTop: 8, // respiro do topo (figma)
+    paddingTop: 8,
   },
   title: {
     fontWeight: "700",
@@ -65,17 +78,14 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     borderRadius: 14,
-    paddingHorizontal: 12,
+    paddingHorizontal: 14,
     height: 46,
   },
   input: {
-    marginLeft: 8,
-    flex: 1,
+    flex: 1,              // 🔥 empurra o ícone para a direita
     fontSize: 14,
+    marginRight: 8,
   },
-  placeholder: {
-  marginLeft: 8,
-  fontSize: 14,
-}
-
 });
+
+

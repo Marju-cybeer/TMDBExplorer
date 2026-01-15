@@ -10,7 +10,16 @@ interface Props {
 }
 
 export function MovieCard({ movie, onPress }: Props) {
-  const { colors, spacing, radius, typography } = useThemeStyles();
+  const { colors, radius, typography } = useThemeStyles();
+
+  const posterUri = movie.poster_path
+    ? `https://image.tmdb.org/t/p/w500${movie.poster_path}`
+    : "https://via.placeholder.com/300x450?text=No+Image";
+
+  const rating =
+    typeof movie.vote_average === "number"
+      ? movie.vote_average.toFixed(1)
+      : "—";
 
   return (
     <TouchableOpacity
@@ -19,19 +28,14 @@ export function MovieCard({ movie, onPress }: Props) {
       activeOpacity={0.8}
     >
       <Image
-        source={{
-          uri: `https://image.tmdb.org/t/p/w500${movie.poster_path}`,
-        }}
+        source={{ uri: posterUri }}
         style={[styles.image, { borderRadius: radius.md }]}
       />
 
       <Text
         style={[
           styles.title,
-          {
-            color: colors.text,
-            fontSize: typography.small,
-          },
+          { color: colors.text, fontSize: typography.small },
         ]}
         numberOfLines={2}
       >
@@ -40,27 +44,20 @@ export function MovieCard({ movie, onPress }: Props) {
 
       <View style={styles.ratingRow}>
         <Ionicons name="star" size={12} color="#F5C518" />
-        <Text
-          style={[
-            styles.rating,
-            { color: colors.muted, fontSize: typography.small },
-          ]}
-        >
-          {movie.vote_average.toFixed(1)}
+        <Text style={[styles.rating, { color: colors.muted }]}>
+          {rating}
         </Text>
 
-        <Text
-          style={[
-            styles.year,
-            { color: colors.muted, fontSize: typography.small },
-          ]}
-        >
-          • {movie.release_date?.split("-")[0]}
-        </Text>
+        {movie.release_date && (
+          <Text style={[styles.year, { color: colors.muted }]}>
+            • {movie.release_date.split("-")[0]}
+          </Text>
+        )}
       </View>
     </TouchableOpacity>
   );
 }
+
 
 const styles = StyleSheet.create({
   container: {
