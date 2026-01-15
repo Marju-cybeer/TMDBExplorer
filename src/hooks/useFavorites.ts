@@ -9,7 +9,7 @@ import {
 
 export function useFavorites(movieId?: number) {
   const [favorites, setFavorites] = useState<FavoriteMovie[]>([]);
-  const [favorite, setFavorite] = useState<boolean | null>(null);
+  const [favorite, setFavorite] = useState<boolean>(false);
   const [loading, setLoading] = useState(true);
 
   const loadFavorites = useCallback(async () => {
@@ -17,12 +17,15 @@ export function useFavorites(movieId?: number) {
     setFavorites(data);
   }, []);
 
-  const checkFavorite = useCallback(async () => {
-    if (!movieId) return;
+ const checkFavorite = useCallback(async () => {
+  if (!movieId) {
+    setFavorite(false);
+    return;
+  }
 
-    const result = await isFavorite(movieId);
-    setFavorite(result);
-  }, [movieId]);
+  const result = await isFavorite(movieId);
+  setFavorite(!!result); // 👈 força boolean
+}, [movieId]);
 
   const toggleFavorite = useCallback(
     async (movie: FavoriteMovie) => {

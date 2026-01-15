@@ -1,5 +1,12 @@
-import { View, Image, Text, StyleSheet, TouchableOpacity } from "react-native";
+import {
+  View,
+  Image,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+} from "react-native";
 import { Ionicons } from "@expo/vector-icons";
+import { useNavigation } from "@react-navigation/native";
 
 import { Movie } from "../types/movie";
 import { useThemeStyles } from "../theme/useThemeStyles";
@@ -10,6 +17,7 @@ interface Props {
 }
 
 export function MovieCard({ movie, onPress }: Props) {
+  const navigation = useNavigation<any>();
   const { colors, radius, typography } = useThemeStyles();
 
   const posterUri = movie.poster_path
@@ -21,9 +29,20 @@ export function MovieCard({ movie, onPress }: Props) {
       ? movie.vote_average.toFixed(1)
       : "—";
 
+  function handlePress() {
+    if (onPress) {
+      onPress();
+      return;
+    }
+
+    navigation.navigate("MovieDetails", {
+      movieId: movie.id,
+    });
+  }
+
   return (
     <TouchableOpacity
-      onPress={onPress}
+      onPress={handlePress}
       style={[styles.container, { width: 120 }]}
       activeOpacity={0.8}
     >
@@ -57,6 +76,7 @@ export function MovieCard({ movie, onPress }: Props) {
     </TouchableOpacity>
   );
 }
+
 
 
 const styles = StyleSheet.create({
