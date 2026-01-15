@@ -1,4 +1,5 @@
 import { View, Image, Text, StyleSheet, TouchableOpacity } from "react-native";
+import { useNavigation } from "@react-navigation/native";
 import { Movie } from "../types/movie";
 import { useThemeStyles } from "../theme/useThemeStyles";
 
@@ -9,16 +10,35 @@ interface Props {
 
 export function MovieCard({ movie, onPress }: Props) {
   const { colors } = useThemeStyles();
+  const navigation = useNavigation<any>();
+
+  const handlePress = () => {
+    if (onPress) {
+      onPress();
+      return;
+    }
+
+    navigation.navigate("MovieDetails", {
+      movieId: movie.id,
+    });
+  };
+
+  const posterUri = movie.poster_path
+    ? `https://image.tmdb.org/t/p/w500${movie.poster_path}`
+    : "https://via.placeholder.com/300x450?text=No+Image";
 
   return (
-    <TouchableOpacity onPress={onPress} style={styles.container}>
-      <Image
-        source={{
-          uri: `https://image.tmdb.org/t/p/w500${movie.poster_path}`,
-        }}
-        style={styles.image}
-      />
-      <Text style={[styles.title, { color: colors.text }]} numberOfLines={1}>
+    <TouchableOpacity
+      onPress={handlePress}
+      activeOpacity={0.8}
+      style={styles.container}
+    >
+      <Image source={{ uri: posterUri }} style={styles.image} />
+
+      <Text
+        style={[styles.title, { color: colors.text }]}
+        numberOfLines={1}
+      >
         {movie.title}
       </Text>
     </TouchableOpacity>

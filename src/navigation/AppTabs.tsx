@@ -1,9 +1,9 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import HomeScreen from "../screens/HomeScreen";
 import SearchScreen from "../screens/SearchScreen";
 import WatchlistScreen from "../screens/WatchlistScreen";
 import { useThemeStyles } from "../theme/useThemeStyles";
 import { Ionicons } from "@expo/vector-icons";
+import { MovieStack } from "./MovieStack";
 
 const Tab = createBottomTabNavigator();
 
@@ -31,9 +31,26 @@ export function AppTabs() {
         },
       })}
     >
-      <Tab.Screen name="Home" component={HomeScreen} />
-      <Tab.Screen name="Search" component={SearchScreen} />
-      <Tab.Screen name="Watchlist" component={WatchlistScreen} />
+      {/* 🏠 HOME + DETAILS */}
+      <Tab.Screen
+        name="Home"
+        component={MovieStack}
+        options={{ title: "Home" }}
+      />
+
+      {/* 🔍 SEARCH */}
+      <Tab.Screen
+        name="Search"
+        component={SearchScreen}
+        options={{ title: "Search" }}
+      />
+
+      {/* ⭐ FAVORITOS */}
+      <Tab.Screen
+        name="Watchlist"
+        component={WatchlistScreen}
+        options={{ title: "Watchlist" }}
+      />
     </Tab.Navigator>
   );
 }
