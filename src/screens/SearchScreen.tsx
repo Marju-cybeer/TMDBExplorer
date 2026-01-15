@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { FlatList, View } from "react-native";
 import { useNavigation, useRoute } from "@react-navigation/native";
 
@@ -10,7 +10,6 @@ import { useSearchMovies } from "../hooks/useSearchMovies";
 import { useThemeStyles } from "../theme/useThemeStyles";
 
 export default function SearchScreen() {
-  const route = useRoute<any>();
   const navigation = useNavigation<any>();
   const { colors } = useThemeStyles();
 
