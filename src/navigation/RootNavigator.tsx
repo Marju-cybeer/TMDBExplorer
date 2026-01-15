@@ -5,6 +5,7 @@ import { useAuth } from "../hooks/useAuth";
 import { AuthStack } from "./AuthStack";
 import { AppTabs } from "./AppTabs";
 import { Loading } from "../components/Loading";
+import SearchScreen from "../screens/SearchScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -19,7 +20,17 @@ export function RootNavigator() {
     <NavigationContainer>
       <Stack.Navigator screenOptions={{ headerShown: false }}>
         {isAuthenticated ? (
-          <Stack.Screen name="App" component={AppTabs} />
+          <>
+            {/* Tabs principais */}
+            <Stack.Screen name="App" component={AppTabs} />
+
+            {/* 🔍 Search fora das tabs */}
+            <Stack.Screen
+              name="Search"
+              component={SearchScreen}
+              options={{ headerShown: false }}
+            />
+          </>
         ) : (
           <Stack.Screen name="Auth" component={AuthStack} />
         )}

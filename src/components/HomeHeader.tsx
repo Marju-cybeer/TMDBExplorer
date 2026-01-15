@@ -14,7 +14,7 @@ export function HomeHeader() {
     if (!query.trim()) return;
 
     navigation.navigate("Search", {
-      initialQuery: query,
+      query: query,
     });
 
     setQuery(""); // 🔥 limpa o input da Home
