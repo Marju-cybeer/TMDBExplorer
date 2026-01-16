@@ -17,6 +17,9 @@ export function AppTabs() {
         tabBarStyle: {
           backgroundColor: colors.surface,
         },
+        sceneContainerStyle: {
+          backgroundColor: colors.background, // 👈 ESSENCIAL
+        },
         tabBarIcon: ({ color, size }) => {
           const icons: any = {
             Home: "home",
@@ -40,3 +43,4 @@ export function AppTabs() {
     </Tab.Navigator>
   );
 }
+

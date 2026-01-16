@@ -12,39 +12,44 @@ export function CastTab({ movieId }: { movieId: number }) {
   }, [movieId]);
 
   return (
-    <FlatList
-      data={cast}
-      horizontal
-      showsHorizontalScrollIndicator={false}
-      keyExtractor={(item) => item.cast_id?.toString()}
-      contentContainerStyle={styles.list}
-      renderItem={({ item }) => {
-        const imageUri = item.profile_path
-          ? `https://image.tmdb.org/t/p/w185${item.profile_path}`
-          : "https://via.placeholder.com/100x100?text=No+Image";
+  <FlatList
+    data={cast}
+    horizontal
+    showsHorizontalScrollIndicator={false}
+    keyExtractor={(item) => item.cast_id?.toString()}
+    style={{ backgroundColor: colors.background }}              // 👈 fundo da lista
+    contentContainerStyle={[
+      styles.list,
+      { backgroundColor: colors.background },                  // 👈 fundo do conteúdo
+    ]}
+    renderItem={({ item }) => {
+      const imageUri = item.profile_path
+        ? `https://image.tmdb.org/t/p/w185${item.profile_path}`
+        : "https://via.placeholder.com/100x100?text=No+Image";
 
-        return (
-          <View style={styles.card}>
-            <Image source={{ uri: imageUri }} style={styles.image} />
+      return (
+        <View style={styles.card}>
+          <Image source={{ uri: imageUri }} style={styles.image} />
 
-            <Text
-              style={[styles.name, { color: colors.text }]}
-              numberOfLines={1}
-            >
-              {item.name}
-            </Text>
+          <Text
+            style={[styles.name, { color: colors.text }]}
+            numberOfLines={1}
+          >
+            {item.name}
+          </Text>
 
-            <Text
-              style={[styles.character, { color: colors.muted }]}
-              numberOfLines={1}
-            >
-              {item.character}
-            </Text>
-          </View>
-        );
-      }}
-    />
-  );
+          <Text
+            style={[styles.character, { color: colors.muted }]}
+            numberOfLines={1}
+          >
+            {item.character}
+          </Text>
+        </View>
+      );
+    }}
+  />
+);
+
 }
 const styles = StyleSheet.create({
   list: {
