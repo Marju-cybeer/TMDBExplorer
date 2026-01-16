@@ -8,8 +8,11 @@ import { HomeTabs, HomeTab } from "../components/HomeTabs";
 import { Loading } from "../components/Loading";
 import { ErrorState } from "../components/ErrorState";
 import { useThemeStyles } from "../theme/useThemeStyles";
+import { useNavigation } from "@react-navigation/native";
+
 
 export default function HomeScreen() {
+  const navigation = useNavigation<any>();
   const { data, loading, error } = useHomeMovies();
   const [activeTab, setActiveTab] = useState<HomeTab>("Now Playing");
   const { spacing } = useThemeStyles();
@@ -27,6 +30,11 @@ export default function HomeScreen() {
   return (
     <MovieList
       movies={moviesMap[activeTab]}
+      onPressMovie={(movie) =>
+        navigation.navigate("MovieDetails", {
+          movieId: movie.id,
+        })
+      }
       ListHeaderComponent={
         <>
           <View style={{ marginBottom: spacing.lg }}>
