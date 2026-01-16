@@ -1,15 +1,37 @@
-import { FlatList, View, ActivityIndicator } from "react-native";
+import { View, ActivityIndicator, FlatList } from "react-native";
 import { useFavorites } from "../hooks/useFavorites";
-import { MovieCard } from "../components/MovieCard";
+import { MovieListItem } from "../components/MovieListItem";
+import { EmptyState } from "../components/EmptyState";
+import { useThemeStyles } from "../theme/useThemeStyles";
+import { useNavigation } from "@react-navigation/native";
 
 export default function WatchlistScreen() {
   const { favorites, loading } = useFavorites();
-console.log(favorites)
+  const { colors } = useThemeStyles();
+  const navigation = useNavigation<any>();
+
   if (loading) {
     return (
-      <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-        <ActivityIndicator size="large" />
+      <View
+        style={{
+          flex: 1,
+          justifyContent: "center",
+          alignItems: "center",
+          backgroundColor: colors.background,
+        }}
+      >
+        <ActivityIndicator size="large" color={colors.primary} />
       </View>
+    );
+  }
+
+  if (!favorites.length) {
+    return (
+      <EmptyState
+        icon="bookmark-outline"
+        title="Sua watchlist está vazia"
+        subtitle="Salve filmes para ver depois ✨"
+      />
     );
   }
 
@@ -17,20 +39,24 @@ console.log(favorites)
     <FlatList
       data={favorites}
       keyExtractor={(item) => item.id.toString()}
-      numColumns={3}
-      contentContainerStyle={{ padding: 8 }}
       renderItem={({ item }) => (
-        <MovieCard
+        <MovieListItem
           movie={{
             id: item.id,
             title: item.title,
-            poster_path: item.poster,
-            vote_average: item.rating,
-            release_date: item.releaseDate,
-            backdrop_path: undefined, // ✅ evita erro de tipagem
+            poster: item.poster,
+            rating: item.rating,
+            year: item.releaseDate?.split("-")[0],
+            
           }}
+          onPress={() =>
+            navigation.navigate("MovieDetails", {
+              movieId: item.id,
+            })
+          }
         />
       )}
+      showsVerticalScrollIndicator={false}
     />
   );
 }
