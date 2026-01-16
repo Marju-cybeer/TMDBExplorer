@@ -9,17 +9,13 @@ type Props = {
     poster: string;
     rating: number;
     year?: string;
-    runtime?: number;
+    
   };
   onPress?: () => void;
   onPressRightIcon?: () => void;
 };
 
-export function MovieListItem({
-  movie,
-  onPress,
-  onPressRightIcon,
-}: Props) {
+export function MovieListItem({ movie, onPress }: Props) {
   const { colors, spacing } = useThemeStyles();
 
   return (
@@ -28,7 +24,6 @@ export function MovieListItem({
       style={{
         flexDirection: "row",
         padding: spacing.md,
-        alignItems: "center",
       }}
     >
       <Image
@@ -36,10 +31,10 @@ export function MovieListItem({
           uri: `https://image.tmdb.org/t/p/w500${movie.poster}`,
         }}
         style={{
-          width: 60,
-          height: 90,
-          borderRadius: 8,
-          backgroundColor: colors.surface,
+          width: 70,
+          height: 100,
+          borderRadius: 10,
+          backgroundColor: colors.background,
         }}
       />
 
@@ -48,31 +43,20 @@ export function MovieListItem({
           style={{
             color: colors.text,
             fontWeight: "600",
-            marginBottom: 4,
+            marginBottom: 6,
           }}
           numberOfLines={1}
         >
           {movie.title}
         </Text>
 
-        <Text style={{ color: colors.muted, fontSize: 12 }}>
-          ⭐ {movie.rating} • {movie.year}
-        </Text>
+       <Text style={{ color: colors.muted, fontSize: 12 }}>
+  ⭐ {movie.rating.toFixed(1)}
+  {movie.year ? ` • ${movie.year}` : ""}
+</Text>
 
-        {movie.runtime && (
-          <Text style={{ color: colors.muted, fontSize: 12 }}>
-            ⏱ {movie.runtime} min
-          </Text>
-        )}
       </View>
-
-      <TouchableOpacity onPress={onPressRightIcon}>
-        <Ionicons
-          name="trash-outline"
-          size={22}
-          color={colors.primary}
-        />
-      </TouchableOpacity>
     </TouchableOpacity>
   );
 }
+
