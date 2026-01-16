@@ -1,63 +1,54 @@
-import { View, ActivityIndicator, FlatList } from "react-native";
+import { FlatList, View, ActivityIndicator } from "react-native";
 import { useFavorites } from "../hooks/useFavorites";
-import { MovieCard } from "../components/MovieCard";
+import { MovieListItem } from "../components/MovieListItem";
 import { EmptyState } from "../components/EmptyState";
+import { ScreenHeader } from "../components/WatchListHeader";
 import { useThemeStyles } from "../theme/useThemeStyles";
 
 export default function WatchlistScreen() {
   const { favorites, loading } = useFavorites();
   const { colors } = useThemeStyles();
 
+  if (loading) {
+    return (
+      <View style={{ flex: 1, justifyContent: "center" }}>
+        <ActivityIndicator />
+      </View>
+    );
+  }
+
   if (!favorites.length) {
     return (
-      <EmptyState
-        icon="bookmark-outline"
-        title="Sua watchlist está vazia"
-        subtitle="Salve filmes para ver depois ✨"
-      />
+      <>
+        <ScreenHeader title="Watch list" />
+        <EmptyState
+          icon="bookmark-outline"
+          title="There is no movie yet!"
+          subtitle="Find your movie by type, title, categories, years, etc."
+        />
+      </>
     );
   }
 
   return (
     <View style={{ flex: 1, backgroundColor: colors.background }}>
-      {/* ⏳ Loading */}
-      {loading && (
-        <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-          <ActivityIndicator size="large" />
-        </View>
-      )}
+      <ScreenHeader title="Watch list" />
 
-      {/* ⭐ Estado vazio */}
-      {!loading && favorites.length === 0 && (
-        <EmptyState
-          icon="cube-outline"
-          title="There is no movie yet!"
-          subtitle="Find your movie by type, title, categories, years, etc."
-        />
-      )}
-
-      {/* 🎬 Lista */}
-      {!loading && favorites.length > 0 && (
       <FlatList
-  data={favorites}
-  keyExtractor={(item) => item.id.toString()}
-  showsVerticalScrollIndicator={false}
-  contentContainerStyle={{ paddingHorizontal: 16, paddingTop: 16 }}
-  renderItem={({ item }) => (
-    <MovieCard
-      movie={{
-        id: item.id,
-        title: item.title,
-        poster_path: item.poster,
-        vote_average: item.rating,
-        release_date: item.releaseDate,
-        backdrop_path: undefined,
-      }}
-    />
-  )}
-/>
-
-      )}
+        data={favorites}
+        keyExtractor={(item) => item.id.toString()}
+        renderItem={({ item }) => (
+          <MovieListItem
+            movie={{
+              id: item.id,
+              title: item.title,
+              poster: item.poster,
+              rating: item.rating,
+               year: item.releaseDate?.split("-")[0],
+            }}
+          />
+        )}
+      />
     </View>
   );
 }
