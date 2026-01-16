@@ -16,19 +16,17 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [loading, setLoading] = useState(true);
 
-  // 🔄 Verifica sessão ao abrir o app
-  useEffect(() => {
-    async function loadSession() {
-      try {
-        const token = await getToken();
-        setIsAuthenticated(!!token);
-      } finally {
-        setLoading(false);
-      }
-    }
+useEffect(() => {
+  async function resetAndLoad() {
+    await removeToken(); // 🔥 força limpar token salvo
+    const token = await getToken();
+    setIsAuthenticated(!!token);
+    setLoading(false);
+  }
 
-    loadSession();
-  }, []);
+  resetAndLoad();
+}, []);
+
 
   // 🔐 Login mockado
   async function signIn() {
