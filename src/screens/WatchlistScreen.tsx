@@ -1,4 +1,4 @@
-import { FlatList, View, ActivityIndicator } from "react-native";
+import { View, ActivityIndicator, FlatList } from "react-native";
 import { useFavorites } from "../hooks/useFavorites";
 import { MovieCard } from "../components/MovieCard";
 import { EmptyState } from "../components/EmptyState";
@@ -7,6 +7,16 @@ import { useThemeStyles } from "../theme/useThemeStyles";
 export default function WatchlistScreen() {
   const { favorites, loading } = useFavorites();
   const { colors } = useThemeStyles();
+
+  if (!favorites.length) {
+    return (
+      <EmptyState
+        icon="bookmark-outline"
+        title="Sua watchlist está vazia"
+        subtitle="Salve filmes para ver depois ✨"
+      />
+    );
+  }
 
   return (
     <View style={{ flex: 1, backgroundColor: colors.background }}>
