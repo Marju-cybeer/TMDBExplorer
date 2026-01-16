@@ -1,14 +1,25 @@
-import { View, TextInput, StyleSheet } from "react-native";
-import { Feather } from "@expo/vector-icons";
+import {
+  View,
+  TextInput,
+  StyleSheet,
+  TouchableOpacity,
+  TextInputProps,
+} from "react-native";
+import { Ionicons } from "@expo/vector-icons";
 import { useThemeStyles } from "../theme/useThemeStyles";
 
-type Props = {
+interface Props extends TextInputProps {
   value: string;
   onChangeText: (text: string) => void;
-  placeholder?: string;
+  onPressIcon?: () => void;
 }
 
-export function SearchInput({ value, onChangeText, placeholder }: Props) {
+export function SearchInput({
+  value,
+  onChangeText,
+  onPressIcon,
+  ...rest
+}: Props) {
   const { colors } = useThemeStyles();
 
   return (
@@ -21,19 +32,26 @@ export function SearchInput({ value, onChangeText, placeholder }: Props) {
       <TextInput
         value={value}
         onChangeText={onChangeText}
-        placeholder={placeholder ?? "Buscar filmes"}
+        placeholder="Search"
         placeholderTextColor={colors.muted}
         style={[styles.input, { color: colors.text }]}
+        {...rest}
       />
 
-      <Feather
-        name="search"
-        size={18}
-        color={colors.muted}
-      />
+      <TouchableOpacity
+        onPress={onPressIcon}
+        activeOpacity={0.7}
+      >
+        <Ionicons
+          name="search"
+          size={20}
+          color={colors.muted}
+        />
+      </TouchableOpacity>
     </View>
   );
 }
+
 const styles = StyleSheet.create({
   container: {
     height: 48,
@@ -43,7 +61,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   input: {
-    flex: 1, // 🔥 empurra o ícone para a direita
+    flex: 1,           // 🔥 empurra a lupa para a direita
     fontSize: 14,
+    marginRight: 8,
   },
 });

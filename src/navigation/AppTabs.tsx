@@ -1,13 +1,11 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { Ionicons } from "@expo/vector-icons";
-
 import HomeScreen from "../screens/HomeScreen";
 import SearchScreen from "../screens/SearchScreen";
 import WatchlistScreen from "../screens/WatchlistScreen";
 import { useThemeStyles } from "../theme/useThemeStyles";
-import { TabParamList } from "./types";
+import { Ionicons } from "@expo/vector-icons";
 
-const Tab = createBottomTabNavigator<TabParamList>();
+const Tab = createBottomTabNavigator();
 
 export function AppTabs() {
   const { colors } = useThemeStyles();
@@ -18,28 +16,24 @@ export function AppTabs() {
         headerShown: false,
         tabBarStyle: {
           backgroundColor: colors.surface,
-          borderTopColor: colors.muted,
         },
-        tabBarActiveTintColor: colors.primary,
-        tabBarInactiveTintColor: colors.muted,
+        sceneContainerStyle: {
+          backgroundColor: colors.background, // 👈 ESSENCIAL
+        },
         tabBarIcon: ({ color, size }) => {
-          let iconName: keyof typeof Ionicons.glyphMap;
+          const icons: any = {
+            Home: "home",
+            Search: "search",
+            Watchlist: "bookmark",
+          };
 
-          switch (route.name) {
-            case "Home":
-              iconName = "home";
-              break;
-            case "Search":
-              iconName = "search";
-              break;
-            case "Watchlist":
-              iconName = "bookmark";
-              break;
-            default:
-              iconName = "home";
-          }
-
-          return <Ionicons name={iconName} size={size} color={color} />;
+          return (
+            <Ionicons
+              name={icons[route.name]}
+              size={size}
+              color={color}
+            />
+          );
         },
       })}
     >
@@ -49,3 +43,4 @@ export function AppTabs() {
     </Tab.Navigator>
   );
 }
+

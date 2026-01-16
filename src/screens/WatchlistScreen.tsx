@@ -1,29 +1,12 @@
 import { View, ActivityIndicator, FlatList } from "react-native";
 import { useFavorites } from "../hooks/useFavorites";
-import { MovieListItem } from "../components/MovieListItem";
+import { MovieCard } from "../components/MovieCard";
 import { EmptyState } from "../components/EmptyState";
 import { useThemeStyles } from "../theme/useThemeStyles";
-import { useNavigation } from "@react-navigation/native";
 
 export default function WatchlistScreen() {
   const { favorites, loading } = useFavorites();
   const { colors } = useThemeStyles();
-  const navigation = useNavigation<any>();
-
-  if (loading) {
-    return (
-      <View
-        style={{
-          flex: 1,
-          justifyContent: "center",
-          alignItems: "center",
-          backgroundColor: colors.background,
-        }}
-      >
-        <ActivityIndicator size="large" color={colors.primary} />
-      </View>
-    );
-  }
 
   if (!favorites.length) {
     return (
@@ -36,27 +19,45 @@ export default function WatchlistScreen() {
   }
 
   return (
-    <FlatList
-      data={favorites}
-      keyExtractor={(item) => item.id.toString()}
-      renderItem={({ item }) => (
-        <MovieListItem
-          movie={{
-            id: item.id,
-            title: item.title,
-            poster: item.poster,
-            rating: item.rating,
-            year: item.releaseDate?.split("-")[0],
-            
-          }}
-          onPress={() =>
-            navigation.navigate("MovieDetails", {
-              movieId: item.id,
-            })
-          }
+    <View style={{ flex: 1, backgroundColor: colors.background }}>
+      {/* ⏳ Loading */}
+      {loading && (
+        <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+          <ActivityIndicator size="large" />
+        </View>
+      )}
+
+      {/* ⭐ Estado vazio */}
+      {!loading && favorites.length === 0 && (
+        <EmptyState
+          icon="cube-outline"
+          title="There is no movie yet!"
+          subtitle="Find your movie by type, title, categories, years, etc."
         />
       )}
-      showsVerticalScrollIndicator={false}
+
+      {/* 🎬 Lista */}
+      {!loading && favorites.length > 0 && (
+      <FlatList
+  data={favorites}
+  keyExtractor={(item) => item.id.toString()}
+  showsVerticalScrollIndicator={false}
+  contentContainerStyle={{ paddingHorizontal: 16, paddingTop: 16 }}
+  renderItem={({ item }) => (
+    <MovieCard
+      movie={{
+        id: item.id,
+        title: item.title,
+        poster_path: item.poster,
+        vote_average: item.rating,
+        release_date: item.releaseDate,
+        backdrop_path: undefined,
+      }}
     />
+  )}
+/>
+
+      )}
+    </View>
   );
 }
