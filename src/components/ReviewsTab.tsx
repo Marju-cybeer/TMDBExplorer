@@ -19,68 +19,67 @@ export function ReviewsTab({ movieId }: { movieId: number }) {
 
   if (!reviews.length) {
     return (
-      <Text style={{ color: colors.muted, padding: 16 }}>
-        Nenhuma avaliação disponível.
-      </Text>
+      <View style={{ flex: 1, backgroundColor: colors.background }}>
+        <Text style={{ color: colors.text, padding: 16 }}>
+          Nenhuma avaliação disponível.
+        </Text>
+      </View>
     );
   }
 
   return (
-    <ScrollView
-      contentContainerStyle={styles.container}
-      showsVerticalScrollIndicator={false}
-    >
-      {reviews.map((review) => {
-        const avatar =
-          review.author_details?.avatar_path
-            ? `https://image.tmdb.org/t/p/w185${review.author_details.avatar_path}`
-            : "https://via.placeholder.com/40";
+    <View style={{ flex: 1, backgroundColor: colors.background }}>
+      <ScrollView
+        style={{ backgroundColor: colors.background }}
+        contentContainerStyle={[
+          styles.container,
+          { backgroundColor: colors.background },
+        ]}
+        showsVerticalScrollIndicator={false}
+      >
+        {reviews.map((review) => {
+          const avatar =
+            review.author_details?.avatar_path
+              ? `https://image.tmdb.org/t/p/w185${review.author_details.avatar_path}`
+              : "https://via.placeholder.com/40";
 
-        return (
-          <View
-            key={review.id}
-            style={[
-              styles.card,
-              { backgroundColor: colors.surface },
-            ]}
-          >
-            {/* HEADER */}
-            <View style={styles.header}>
-              <Image source={{ uri: avatar }} style={styles.avatar} />
-
-              <View style={{ flex: 1 }}>
-                <Text
-                  style={[
-                    styles.author,
-                    { color: colors.text },
-                  ]}
-                >
-                  {review.author}
-                </Text>
-
-                {review.author_details?.rating && (
-                  <Text style={{ color: colors.muted }}>
-                    ⭐ {review.author_details.rating}/10
-                  </Text>
-                )}
-              </View>
-            </View>
-
-            {/* CONTENT */}
-            <Text
+          return (
+            <View
+              key={review.id}
               style={[
-                styles.content,
-                { color: colors.text },
+                styles.card,
+                { backgroundColor: colors.background },
               ]}
             >
-              {review.content}
-            </Text>
-          </View>
-        );
-      })}
-    </ScrollView>
+              {/* HEADER */}
+              <View style={styles.header}>
+                <Image source={{ uri: avatar }} style={styles.avatar} />
+
+                <View style={{ flex: 1 }}>
+                  <Text style={[styles.author, { color: colors.text }]}>
+                    {review.author}
+                  </Text>
+
+                  {review.author_details?.rating && (
+                    <Text style={{ color: colors.muted }}>
+                      ⭐ {review.author_details.rating}/10
+                    </Text>
+                  )}
+                </View>
+              </View>
+
+              {/* CONTENT */}
+              <Text style={[styles.content, { color: colors.text }]}>
+                {review.content}
+              </Text>
+            </View>
+          );
+        })}
+      </ScrollView>
+    </View>
   );
 }
+
 const styles = StyleSheet.create({
   container: {
     padding: 16,

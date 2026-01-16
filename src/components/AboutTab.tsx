@@ -14,9 +14,13 @@ export function AboutTab({ overview }: { overview: string }) {
 
   return (
     <ScrollView
-      contentContainerStyle={styles.container}
-      showsVerticalScrollIndicator={false}
-    >
+    style={{ backgroundColor: colors.background }}
+       contentContainerStyle={[
+      styles.container,
+      { backgroundColor: colors.background },
+    ]}
+    showsVerticalScrollIndicator={false}
+  >
       <Text
         style={[
           styles.text,

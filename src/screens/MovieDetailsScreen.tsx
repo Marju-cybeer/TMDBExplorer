@@ -18,6 +18,9 @@ export default function MovieDetailsScreen() {
 
   const { colors } = useThemeStyles();
 
+  // ✅ Hook SEMPRE no topo
+  const { favorite, toggleFavorite } = useFavorites(movieId);
+
   useEffect(() => {
     async function loadMovie() {
       try {
@@ -51,30 +54,31 @@ export default function MovieDetailsScreen() {
 
   if (!movie) return null;
 
-  const { favorite, toggleFavorite } = useFavorites(movie.id);
-
   return (
+  <View style={{ flex: 1, backgroundColor: colors.background }}>
     <SafeAreaView style={{ flex: 1, backgroundColor: colors.background }}>
-      <View style={{ flex: 1 }}>
-        {/* 🎬 HEADER COM FAVORITO */}
-        <MovieHeader movie={movie}>
-          <FavoriteButton
-            active={favorite}
-            onPress={() =>
-              toggleFavorite({
-                id: movie.id,
-                title: movie.title,
-                poster: movie.poster_path,
-                rating: movie.vote_average,
-                releaseDate: movie.release_date,
-              })
-            }
-          />
-        </MovieHeader>
+      {/* 🎬 HEADER COM FAVORITO */}
+      <MovieHeader movie={movie}>
+        <FavoriteButton
+          active={favorite}
+          onPress={() =>
+            toggleFavorite({
+              id: movie.id,
+              title: movie.title,
+              poster: movie.poster_path,
+              rating: movie.vote_average,
+              releaseDate: movie.release_date,
+            })
+          }
+        />
+      </MovieHeader>
 
-        {/* 📑 TABS */}
+      {/* 📑 TABS */}
+      <View style={{ flex: 1, backgroundColor: colors.background }}>
         <MovieTabs movie={movie} />
       </View>
     </SafeAreaView>
-  );
+  </View>
+);
+
 }
