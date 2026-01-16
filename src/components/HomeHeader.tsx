@@ -4,10 +4,12 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { useNavigation } from "@react-navigation/native";
 import { useState } from "react";
 import { useThemeStyles } from "../theme/useThemeStyles";
+import { useAuth } from "../hooks/useAuth";
 
 export function HomeHeader() {
   const { colors, typography } = useThemeStyles();
   const navigation = useNavigation<any>();
+  const { signOut } = useAuth(); // 🔐
   const [query, setQuery] = useState("");
 
   function handleSearch() {
@@ -17,23 +19,31 @@ export function HomeHeader() {
       query: query,
     });
 
-    setQuery(""); // 🔥 limpa o input da Home
+    setQuery("");
   }
 
   return (
     <SafeAreaView edges={["top"]} style={{ backgroundColor: colors.background }}>
       <View style={styles.container}>
-        <Text
-          numberOfLines={1}
-          adjustsFontSizeToFit
-          style={[
-            styles.title,
-            { color: colors.text, fontSize: typography.heading },
-          ]}
-        >
-          What do you want to watch?
-        </Text>
+        {/* 🔝 Linha do título + logout */}
+        <View style={styles.headerRow}>
+          <Text
+            numberOfLines={1}
+            adjustsFontSizeToFit
+            style={[
+              styles.title,
+              { color: colors.text, fontSize: typography.heading },
+            ]}
+          >
+            What do you want to watch?
+          </Text>
 
+          <TouchableOpacity onPress={signOut}>
+            <Ionicons name="log-out-outline" size={22} color={colors.text} />
+          </TouchableOpacity>
+        </View>
+
+        {/* 🔍 Search box */}
         <View
           style={[
             styles.searchBox,
@@ -59,20 +69,21 @@ export function HomeHeader() {
   );
 }
 
-
-
-
 const styles = StyleSheet.create({
-  safe: {
-    paddingBottom: 16,
-  },
   container: {
     paddingHorizontal: 16,
     paddingTop: 8,
   },
+  headerRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    marginBottom: 16,
+  },
   title: {
     fontWeight: "700",
-    marginBottom: 16,
+    flex: 1,
+    marginRight: 12,
   },
   searchBox: {
     flexDirection: "row",
@@ -82,10 +93,8 @@ const styles = StyleSheet.create({
     height: 46,
   },
   input: {
-    flex: 1,              // 🔥 empurra o ícone para a direita
+    flex: 1,
     fontSize: 14,
     marginRight: 8,
   },
 });
-
-
