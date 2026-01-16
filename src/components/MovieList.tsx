@@ -21,37 +21,38 @@ export function MovieList({
     ({ item }: { item: Movie }) => (
       <MovieCard
         movie={item}
-        onPress={() => onPressMovie?.(item)}
+        {...(onPressMovie && {
+          onPress: () => onPressMovie(item),
+        })}
       />
     ),
     [onPressMovie]
   );
 
   return (
-  <FlatList
-    data={movies}
-    renderItem={renderItem}
-    keyExtractor={(item) => item.id.toString()}
-    ListHeaderComponent={ListHeaderComponent}
+    <FlatList
+      data={movies}
+      renderItem={renderItem}
+      keyExtractor={(item) => item.id.toString()}
+      ListHeaderComponent={ListHeaderComponent}
 
-    numColumns={3}
-    columnWrapperStyle={{
-      justifyContent: "space-between",
-      marginBottom: spacing.md,
-    }}
+      numColumns={3}
+      columnWrapperStyle={{
+        justifyContent: "space-between",
+        marginBottom: spacing.md,
+      }}
 
-    initialNumToRender={9}
-    maxToRenderPerBatch={9}
-    windowSize={6}
-    removeClippedSubviews
+      initialNumToRender={9}
+      maxToRenderPerBatch={9}
+      windowSize={6}
+      removeClippedSubviews
 
-    contentContainerStyle={{
-      paddingHorizontal: spacing.md,
-      paddingBottom: spacing.xl,
-      backgroundColor: colors.background,
-    }}
-    showsVerticalScrollIndicator={false}
-  />
-);
-
+      contentContainerStyle={{
+        paddingHorizontal: spacing.md,
+        paddingBottom: spacing.xl,
+        backgroundColor: colors.background,
+      }}
+      showsVerticalScrollIndicator={false}
+    />
+  );
 }
