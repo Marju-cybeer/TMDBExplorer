@@ -1,4 +1,3 @@
-import * as SQLite from "expo-sqlite";
 import { db } from "./index";
 
 export interface FavoriteMovie {
@@ -7,81 +6,47 @@ export interface FavoriteMovie {
   poster: string;
   rating: number;
   releaseDate: string;
+  createdAt?: string;
 }
 
-export function addFavorite(movie: FavoriteMovie) {
-  return new Promise<void>((resolve, reject) => {
-    db.transaction((tx: SQLite.SQLTransaction) => {
-      tx.executeSql(
-        `
-        INSERT OR REPLACE INTO favorites
-        (id, title, poster, rating, releaseDate, createdAt)
-        VALUES (?, ?, ?, ?, ?, ?)
-        `,
-        [
-          movie.id,
-          movie.title,
-          movie.poster,
-          movie.rating,
-          movie.releaseDate,
-          new Date().toISOString(),
-        ],
-        (_tx: SQLite.SQLTransaction) => resolve(),
-        (_tx: SQLite.SQLTransaction, error: SQLite.SQLError) => {
-          reject(error);
-          return false;
-        }
-      );
-    });
-  });
+export async function addFavorite(movie: FavoriteMovie): Promise<void> {
+  await db.runAsync(
+    `
+    INSERT OR REPLACE INTO favorites
+    (id, title, poster, rating, releaseDate, createdAt)
+    VALUES (?, ?, ?, ?, ?, ?)
+    `,
+    [
+      movie.id,
+      movie.title,
+      movie.poster,
+      movie.rating,
+      movie.releaseDate,
+      new Date().toISOString(),
+    ]
+  );
 }
 
-export function removeFavorite(id: number) {
-  return new Promise<void>((resolve, reject) => {
-    db.transaction((tx: SQLite.SQLTransaction) => {
-      tx.executeSql(
-        `DELETE FROM favorites WHERE id = ?`,
-        [id],
-        (_tx: SQLite.SQLTransaction) => resolve(),
-        (_tx: SQLite.SQLTransaction, error: SQLite.SQLError) => {
-          reject(error);
-          return false;
-        }
-      );
-    });
-  });
+export async function removeFavorite(id: number): Promise<void> {
+  await db.runAsync(
+    `DELETE FROM favorites WHERE id = ?`,
+    [id]
+  );
 }
 
-export function getFavorites() {
-  return new Promise<FavoriteMovie[]>((resolve, reject) => {
-    db.transaction((tx: SQLite.SQLTransaction) => {
-      tx.executeSql(
-        `SELECT * FROM favorites ORDER BY createdAt DESC`,
-        [],
-        (
-          _tx: SQLite.SQLTransaction,
-          result: SQLite.SQLResultSet
-        ) => resolve(result.rows._array),
-        (_tx: SQLite.SQLTransaction, error: SQLite.SQLError) => {
-          reject(error);
-          return false;
-        }
-      );
-    });
-  });
+export async function getFavorites(): Promise<FavoriteMovie[]> {
+  const result = await db.getAllAsync<FavoriteMovie>(
+    `SELECT * FROM favorites ORDER BY createdAt DESC`
+  );
+
+  return result;
 }
 
-export function isFavorite(id: number) {
-  return new Promise<boolean>((resolve) => {
-    db.transaction((tx: SQLite.SQLTransaction) => {
-      tx.executeSql(
-        `SELECT id FROM favorites WHERE id = ?`,
-        [id],
-        (
-          _tx: SQLite.SQLTransaction,
-          result: SQLite.SQLResultSet
-        ) => resolve(result.rows.length > 0)
-      );
-    });
-  });
+export async function isFavorite(id: number): Promise<boolean> {
+  const result = await db.getFirstAsync<{ id: number }>(
+    `SELECT id FROM favorites WHERE id = ?`,
+    [id]
+  );
+
+  return !!result;
 }

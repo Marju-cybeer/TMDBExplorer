@@ -1,5 +1,5 @@
 import { createContext, useEffect, useState } from "react";
-import { getToken, removeToken, saveToken } from "../utils/authStorage";
+import { getToken, removeToken, saveToken } from "../utils/AuthStorage";
 
 interface AuthContextData {
   isAuthenticated: boolean;

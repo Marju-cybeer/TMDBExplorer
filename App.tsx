@@ -1,9 +1,10 @@
 import { StatusBar } from "expo-status-bar";
-import { StyleSheet, View } from "react-native";
-import { RootNavigator } from "./src/navigation/RootNavigator";
-import { AuthProvider } from "./src/context/AuthContext";
-import { ThemeProvider } from "./src/store/theme.store";
 import { useEffect } from "react";
+import { NavigationContainer } from "@react-navigation/native";
+
+import { ThemeProvider } from "./src/context/ThemeContext";
+import { AuthProvider } from "./src/context/AuthContext";
+import { RootStack } from "./src/navigation/RootStack";
 import { initDatabase } from "./src/database";
 
 export default function App() {
@@ -14,18 +15,11 @@ export default function App() {
   return (
     <AuthProvider>
       <ThemeProvider>
-        <RootNavigator />
-        <StatusBar style="auto" />
+        <NavigationContainer>
+          <StatusBar style="light" backgroundColor="#0F1C26" />
+          <RootStack />
+        </NavigationContainer>
       </ThemeProvider>
     </AuthProvider>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
