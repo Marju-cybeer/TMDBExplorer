@@ -28,24 +28,25 @@ export default function WatchlistScreen() {
 
       {/* 🎬 Lista */}
       {!loading && favorites.length > 0 && (
-        <FlatList
-          data={favorites}
-          keyExtractor={(item) => item.id.toString()}
-          numColumns={3}
-          contentContainerStyle={{ padding: 8 }}
-          renderItem={({ item }) => (
-            <MovieCard
-              movie={{
-                id: item.id,
-                title: item.title,
-                poster_path: item.poster,
-                vote_average: item.rating,
-                release_date: item.releaseDate,
-                backdrop_path: undefined,
-              }}
-            />
-          )}
-        />
+      <FlatList
+  data={favorites}
+  keyExtractor={(item) => item.id.toString()}
+  showsVerticalScrollIndicator={false}
+  contentContainerStyle={{ paddingHorizontal: 16, paddingTop: 16 }}
+  renderItem={({ item }) => (
+    <MovieCard
+      movie={{
+        id: item.id,
+        title: item.title,
+        poster_path: item.poster,
+        vote_average: item.rating,
+        release_date: item.releaseDate,
+        backdrop_path: undefined,
+      }}
+    />
+  )}
+/>
+
       )}
     </View>
   );
