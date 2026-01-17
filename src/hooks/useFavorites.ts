@@ -10,7 +10,7 @@ import {
 
 export function useFavorites(movieId?: number) {
   const [favorites, setFavorites] = useState<FavoriteMovie[]>([]);
-  const [favorite, setFavorite] = useState<boolean>(false);
+  const [favorite, setFavorite] = useState(false);
   const [loading, setLoading] = useState(true);
 
   const loadFavorites = useCallback(async () => {
@@ -42,23 +42,23 @@ export function useFavorites(movieId?: number) {
     [favorite, checkFavorite, loadFavorites]
   );
 
+  // 🔹 Primeira carga
   useEffect(() => {
     async function init() {
       await loadFavorites();
-      if (movieId) {
-        await checkFavorite();
-      }
+      await checkFavorite();
       setLoading(false);
     }
 
     init();
-  }, [movieId, loadFavorites, checkFavorite]);
+  }, [loadFavorites, checkFavorite]);
 
-  // 🔁 Recarrega favoritos sempre que a tela ganhar foco
+  // 🔁 Sempre que a tela ganhar foco
   useFocusEffect(
     useCallback(() => {
       loadFavorites();
-    }, [loadFavorites])
+      checkFavorite();
+    }, [loadFavorites, checkFavorite])
   );
 
   return {

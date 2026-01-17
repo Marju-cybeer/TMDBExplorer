@@ -4,10 +4,13 @@ import { MovieListItem } from "../components/MovieListItem";
 import { EmptyState } from "../components/EmptyState";
 import { ScreenHeader } from "../components/WatchListHeader";
 import { useThemeStyles } from "../theme/useThemeStyles";
+import { useNavigation } from "@react-navigation/native";
+
 
 export default function WatchlistScreen() {
   const { favorites, loading } = useFavorites();
   const { colors } = useThemeStyles();
+  const navigation = useNavigation<any>();
 
   if (loading) {
     return (
@@ -46,6 +49,9 @@ export default function WatchlistScreen() {
               rating: item.rating,
                year: item.releaseDate?.split("-")[0],
             }}
+           onPress={() =>
+    navigation.navigate("MovieDetails", { movieId: item.id })
+  } 
           />
         )}
       />
