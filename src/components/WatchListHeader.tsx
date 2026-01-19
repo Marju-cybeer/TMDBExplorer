@@ -1,39 +1,56 @@
-// components/ScreenHeader.tsx
-import { View, Text, TouchableOpacity } from "react-native";
+import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import { useThemeStyles } from "../theme/useThemeStyles";
+import { SafeAreaView } from "react-native-safe-area-context";
 
-export function ScreenHeader({ title }: { title: string }) {
-  const navigation = useNavigation();
-  const { colors, spacing } = useThemeStyles();
+type Props = {
+  title: string;
+};
+
+export function ScreenHeader({ title }: Props) {
+  const navigation = useNavigation<any>();
+  const { colors, typography } = useThemeStyles();
 
   return (
-    <View
-      style={{
-        flexDirection: "row",
-        alignItems: "center",
-        padding: spacing.md,
-      }}
-    >
-      <TouchableOpacity onPress={() => navigation.goBack()}>
-        <Ionicons
-          name="chevron-back"
-          size={24}
-          color={colors.text}
-        />
-      </TouchableOpacity>
+    <SafeAreaView edges={["top"]} style={{ backgroundColor: colors.background }}>
+      <View style={styles.container}>
+        {/* 🔙 Botão voltar */}
+        <TouchableOpacity
+          style={styles.backButton}
+          onPress={() => navigation.goBack()}
+        >
+          <Ionicons name="chevron-back" size={24} color={colors.text} />
+        </TouchableOpacity>
 
-      <Text
-        style={{
-          color: colors.text,
-          fontSize: 18,
-          fontWeight: "600",
-          marginLeft: spacing.sm,
-        }}
-      >
-        {title}
-      </Text>
-    </View>
+        {/* 🧠 Título centralizado */}
+        <Text
+          style={[
+            styles.title,
+            { color: colors.text, fontSize: typography.medium },
+          ]}
+          numberOfLines={1}
+        >
+          {title}
+        </Text>
+      </View>
+    </SafeAreaView>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    height: 56, // ✅ altura padrão de header (Figma-like)
+    justifyContent: "center",
+    alignItems: "center",
+    paddingHorizontal: 16,
+  },
+  backButton: {
+    position: "absolute",
+    left: 16,
+  },
+  title: {
+    fontWeight: "600",
+  },
+});
+

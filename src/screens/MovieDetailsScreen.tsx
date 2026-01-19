@@ -71,6 +71,7 @@ export default function MovieDetailsScreen() {
             })
           }
         />
+        
       </MovieHeader>
 
       {/* 📑 TABS */}
