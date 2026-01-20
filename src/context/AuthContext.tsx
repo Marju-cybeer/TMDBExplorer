@@ -1,64 +1,42 @@
 import { createContext, useEffect, useState } from "react";
-import { getToken, removeToken, saveToken } from "../utils/AuthStorage";
+import * as SecureStore from "expo-secure-store";
 
-interface AuthContextData {
-  isAuthenticated: boolean;
-  signIn: () => Promise<void>;
-  signOut: () => Promise<void>;
+export type AuthContextData = {
+  signed: boolean;
   loading: boolean;
-}
+  login: (username: string, password: string) => Promise<void>;
+  logout: () => Promise<void>;
+};
 
-export const AuthContext = createContext<AuthContextData>(
-  {} as AuthContextData
-);
+export const AuthContext = createContext<AuthContextData | null>(null);
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [signed, setSigned] = useState(false);
   const [loading, setLoading] = useState(true);
 
-useEffect(() => {
-  async function resetAndLoad() {
-    await removeToken(); // 🔥 força limpar token salvo
-    const token = await getToken();
-    setIsAuthenticated(!!token);
-    setLoading(false);
-  }
-
-  resetAndLoad();
-}, []);
-
-
-  // 🔐 Login mockado
-  async function signIn() {
-    setLoading(true);
-    try {
-      await saveToken("mock-token");
-      setIsAuthenticated(true);
-    } finally {
+  useEffect(() => {
+    async function loadSession() {
+      const token = await SecureStore.getItemAsync("auth_token");
+      setSigned(!!token);
       setLoading(false);
+    }
+    loadSession();
+  }, []);
+
+  async function login(username: string, password: string) {
+    if (username && password) {
+      await SecureStore.setItemAsync("auth_token", "mock-token");
+      setSigned(true);
     }
   }
 
-  // 🚪 Logout
-  async function signOut() {
-    setLoading(true);
-    try {
-      await removeToken();
-      setIsAuthenticated(false);
-    } finally {
-      setLoading(false);
-    }
+  async function logout() {
+    await SecureStore.deleteItemAsync("auth_token");
+    setSigned(false);
   }
 
   return (
-    <AuthContext.Provider
-      value={{
-        isAuthenticated,
-        signIn,
-        signOut,
-        loading,
-      }}
-    >
+    <AuthContext.Provider value={{ signed, loading, login, logout }}>
       {children}
     </AuthContext.Provider>
   );

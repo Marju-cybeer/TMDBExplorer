@@ -1,72 +1,72 @@
-import { View, Text, TouchableOpacity, StyleSheet, Alert } from "react-native";
 import { useState } from "react";
+import { View, Text, TextInput, TouchableOpacity } from "react-native";
 import { useAuth } from "../hooks/useAuth";
 import { useThemeStyles } from "../theme/useThemeStyles";
-import { Loading } from "../components/Loading";
 
-export default function LoginScreen() {
-  const { signIn, loading } = useAuth();
-  const { colors } = useThemeStyles();
-  const [submitting, setSubmitting] = useState(false);
+export function LoginScreen() {
+  const { login } = useAuth();
+  const { colors, spacing, radius } = useThemeStyles();
 
-  async function handleLogin() {
-    try {
-      setSubmitting(true);
-      await signIn();
-    } catch (error) {
-      Alert.alert("Erro ao entrar", "Não foi possível realizar o login.");
-    } finally {
-      setSubmitting(false);
-    }
-  }
-
-  if (loading) {
-    return <Loading />;
-  }
+  const [user, setUser] = useState("");
+  const [pass, setPass] = useState("");
 
   return (
-    <View style={[styles.container, { backgroundColor: colors.background }]}>
-      <Text style={[styles.title, { color: colors.text }]}>
-        TMDB Explorer
+    <View
+      style={{
+        flex: 1,
+        justifyContent: "center",
+        padding: spacing.xl,
+        backgroundColor: colors.background,
+      }}
+    >
+      <Text style={{ fontSize: 22, marginBottom: spacing.lg, color: colors.text }}>
+        Login
       </Text>
 
+      <TextInput
+        placeholder="Usuário"
+        placeholderTextColor={colors.textSecondary}
+        value={user}
+        onChangeText={setUser}
+        style={{
+          borderWidth: 1,
+          borderColor: colors.border,
+          borderRadius: radius.md,
+          padding: spacing.md,
+          marginBottom: spacing.md,
+          color: colors.text,
+        }}
+      />
+
+      <TextInput
+        placeholder="Senha"
+        placeholderTextColor={colors.textSecondary}
+        secureTextEntry
+        value={pass}
+        onChangeText={setPass}
+        style={{
+          borderWidth: 1,
+          borderColor: colors.border,
+          borderRadius: radius.md,
+          padding: spacing.md,
+          marginBottom: spacing.lg,
+          color: colors.text,
+        }}
+      />
+
       <TouchableOpacity
-        style={[
-          styles.button,
-          { backgroundColor: colors.primary, opacity: submitting ? 0.7 : 1 },
-        ]}
-        onPress={handleLogin}
-        disabled={submitting}
+        onPress={() => login(user, pass)}
+        style={{
+          backgroundColor: colors.primary,
+          padding: spacing.md,
+          borderRadius: radius.md,
+          alignItems: "center",
+        }}
       >
-        <Text style={styles.buttonText}>
-          {submitting ? "Entrando..." : "Entrar"}
+        <Text style={{ color: "#fff", fontWeight: "600" }}>
+          Entrar
         </Text>
       </TouchableOpacity>
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    padding: 24,
-  },
-  title: {
-    fontSize: 28,
-    marginBottom: 32,
-    fontWeight: "600",
-  },
-  button: {
-    width: "100%",
-    paddingVertical: 14,
-    borderRadius: 12,
-    alignItems: "center",
-  },
-  buttonText: {
-    color: "#FFF",
-    fontSize: 16,
-    fontWeight: "600",
-  },
-});
