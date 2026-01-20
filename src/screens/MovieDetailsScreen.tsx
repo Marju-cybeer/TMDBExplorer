@@ -3,9 +3,8 @@ import { View, SafeAreaView, ActivityIndicator } from "react-native";
 import { useRoute } from "@react-navigation/native";
 
 import { getMovieDetails } from "../services/movie-details.service";
-import { MovieHeader } from "../components/MovieHeader";
 import { MovieTabs } from "../components/MovieTabs";
-import { FavoriteButton } from "../components/FavoriteButton";
+import { DetailsHeader } from "../components/DetailsHeader";
 import { useFavorites } from "../hooks/useFavorites";
 import { useThemeStyles } from "../theme/useThemeStyles";
 
@@ -17,26 +16,18 @@ export default function MovieDetailsScreen() {
   const [loading, setLoading] = useState(true);
 
   const { colors } = useThemeStyles();
-
-  // ✅ Hook SEMPRE no topo
   const { favorite, toggleFavorite } = useFavorites(movieId);
 
   useEffect(() => {
     async function loadMovie() {
-      try {
-        const data = await getMovieDetails(movieId);
-        setMovie(data);
-      } catch (error) {
-        console.error("Erro ao carregar detalhes do filme", error);
-      } finally {
-        setLoading(false);
-      }
+      const data = await getMovieDetails(movieId);
+      setMovie(data);
+      setLoading(false);
     }
 
     loadMovie();
   }, [movieId]);
 
-  // ⏳ Loading
   if (loading) {
     return (
       <SafeAreaView
@@ -74,12 +65,9 @@ export default function MovieDetailsScreen() {
         
       </MovieHeader>
 
-      {/* 📑 TABS */}
-      <View style={{ flex: 1, backgroundColor: colors.background }}>
+      <View style={{ flex: 1 }}>
         <MovieTabs movie={movie} />
       </View>
-    </SafeAreaView>
-  </View>
-);
-
+    </View>
+  );
 }
