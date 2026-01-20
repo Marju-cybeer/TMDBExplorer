@@ -20,14 +20,18 @@ export default function MovieDetailsScreen() {
 
   useEffect(() => {
     async function loadMovie() {
-      const data = await getMovieDetails(movieId);
-      setMovie(data);
-      setLoading(false);
+      try {
+        const data = await getMovieDetails(movieId);
+        setMovie(data);
+      } finally {
+        setLoading(false);
+      }
     }
 
     loadMovie();
   }, [movieId]);
 
+  // ⏳ Loading
   if (loading) {
     return (
       <SafeAreaView
@@ -46,13 +50,14 @@ export default function MovieDetailsScreen() {
   if (!movie) return null;
 
   return (
-  <View style={{ flex: 1, backgroundColor: colors.background }}>
-    <SafeAreaView style={{ flex: 1, backgroundColor: colors.background }}>
-      {/* 🎬 HEADER COM FAVORITO */}
-      <MovieHeader movie={movie}>
-        <FavoriteButton
-          active={favorite}
-          onPress={() =>
+    <View style={{ flex: 1, backgroundColor: colors.background }}>
+      <SafeAreaView style={{ flex: 1 }}>
+        
+        {/* 🎬 HEADER DETALHES */}
+        <DetailsHeader
+          movie={movie}
+          favorite={favorite}
+          onToggleFavorite={() =>
             toggleFavorite({
               id: movie.id,
               title: movie.title,
@@ -62,12 +67,13 @@ export default function MovieDetailsScreen() {
             })
           }
         />
-        
-      </MovieHeader>
 
-      <View style={{ flex: 1 }}>
-        <MovieTabs movie={movie} />
-      </View>
+        {/* 📑 TABS */}
+        <View style={{ flex: 1 }}>
+          <MovieTabs movie={movie} />
+        </View>
+
+      </SafeAreaView>
     </View>
   );
 }

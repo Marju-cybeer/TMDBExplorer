@@ -91,6 +91,7 @@ export function DetailsHeader({ movie, favorite, onToggleFavorite }: Props) {
               {
                 color: colors.text,
                 fontSize: typography.heading,
+                marginTop: spacing.sm,
               },
             ]}
             numberOfLines={3}
@@ -106,7 +107,7 @@ export function DetailsHeader({ movie, favorite, onToggleFavorite }: Props) {
           styles.infoRow,
           {
             justifyContent: "center",
-            marginTop: spacing.sm,
+            marginTop: spacing.xl,
             paddingHorizontal: spacing.lg,
             marginBottom: spacing.xl,
           },
