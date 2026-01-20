@@ -9,7 +9,7 @@ import { useAuth } from "../hooks/useAuth";
 export function HomeHeader() {
   const { colors, typography } = useThemeStyles();
   const navigation = useNavigation<any>();
-  const { signOut } = useAuth(); // 🔐
+  const { logout } = useAuth(); // 🔐
   const [query, setQuery] = useState("");
 
   function handleSearch() {
@@ -38,7 +38,7 @@ export function HomeHeader() {
             What do you want to watch?
           </Text>
 
-          <TouchableOpacity onPress={signOut}>
+          <TouchableOpacity onPress={logout}>
             <Ionicons name="log-out-outline" size={22} color={colors.text} />
           </TouchableOpacity>
         </View>

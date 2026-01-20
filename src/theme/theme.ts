@@ -9,7 +9,8 @@ export interface Theme {
     textSecondary: string;
     primary: string;
     muted: string;
-  };
+    border: string;
+    };
 }
 
 import { lightTheme } from "./light";
