@@ -8,28 +8,46 @@ interface AuthContextData {
   loading: boolean;
 }
 
-export const AuthContext = createContext({} as AuthContextData);
+export const AuthContext = createContext<AuthContextData>(
+  {} as AuthContextData
+);
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    getToken().then((token) => {
-      setIsAuthenticated(!!token);
-      setLoading(false);
-    });
-  }, []);
-
-  async function signIn() {
-    // Mock login → qualquer usuário entra
-    await saveToken("mock-token");
-    setIsAuthenticated(true);
+useEffect(() => {
+  async function resetAndLoad() {
+    await removeToken(); // 🔥 força limpar token salvo
+    const token = await getToken();
+    setIsAuthenticated(!!token);
+    setLoading(false);
   }
 
+  resetAndLoad();
+}, []);
+
+
+  // 🔐 Login mockado
+  async function signIn() {
+    setLoading(true);
+    try {
+      await saveToken("mock-token");
+      setIsAuthenticated(true);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  // 🚪 Logout
   async function signOut() {
-    await removeToken();
-    setIsAuthenticated(false);
+    setLoading(true);
+    try {
+      await removeToken();
+      setIsAuthenticated(false);
+    } finally {
+      setLoading(false);
+    }
   }
 
   return (

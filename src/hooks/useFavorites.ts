@@ -1,4 +1,5 @@
 import { useEffect, useState, useCallback } from "react";
+import { useFocusEffect } from "@react-navigation/native";
 import {
   addFavorite,
   removeFavorite,
@@ -9,7 +10,7 @@ import {
 
 export function useFavorites(movieId?: number) {
   const [favorites, setFavorites] = useState<FavoriteMovie[]>([]);
-  const [favorite, setFavorite] = useState<boolean>(false);
+  const [favorite, setFavorite] = useState(false);
   const [loading, setLoading] = useState(true);
 
   const loadFavorites = useCallback(async () => {
@@ -17,20 +18,18 @@ export function useFavorites(movieId?: number) {
     setFavorites(data);
   }, []);
 
- const checkFavorite = useCallback(async () => {
-  if (!movieId) {
-    setFavorite(false);
-    return;
-  }
+  const checkFavorite = useCallback(async () => {
+    if (!movieId) {
+      setFavorite(false);
+      return;
+    }
 
-  const result = await isFavorite(movieId);
-  setFavorite(!!result); // 👈 força boolean
-}, [movieId]);
+    const result = await isFavorite(movieId);
+    setFavorite(!!result);
+  }, [movieId]);
 
   const toggleFavorite = useCallback(
     async (movie: FavoriteMovie) => {
-      if (!movieId) return;
-
       if (favorite) {
         await removeFavorite(movie.id);
       } else {
@@ -40,22 +39,27 @@ export function useFavorites(movieId?: number) {
       await checkFavorite();
       await loadFavorites();
     },
-    [favorite, movieId, checkFavorite, loadFavorites]
+    [favorite, checkFavorite, loadFavorites]
   );
 
+  // 🔹 Primeira carga
   useEffect(() => {
     async function init() {
       await loadFavorites();
-
-      if (movieId) {
-        await checkFavorite();
-      }
-
+      await checkFavorite();
       setLoading(false);
     }
 
     init();
-  }, [movieId, loadFavorites, checkFavorite]);
+  }, [loadFavorites, checkFavorite]);
+
+  // 🔁 Sempre que a tela ganhar foco
+  useFocusEffect(
+    useCallback(() => {
+      loadFavorites();
+      checkFavorite();
+    }, [loadFavorites, checkFavorite])
+  );
 
   return {
     favorites,

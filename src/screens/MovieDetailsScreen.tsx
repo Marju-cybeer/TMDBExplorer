@@ -46,20 +46,24 @@ export default function MovieDetailsScreen() {
   if (!movie) return null;
 
   return (
-    <View style={{ flex: 1, backgroundColor: colors.background }}>
-      <DetailsHeader
-        movie={movie}
-        favorite={favorite}
-        onToggleFavorite={() =>
-          toggleFavorite({
-            id: movie.id,
-            title: movie.title,
-            poster: movie.poster_path,
-            rating: movie.vote_average,
-            releaseDate: movie.release_date,
-          })
-        }
-      />
+  <View style={{ flex: 1, backgroundColor: colors.background }}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: colors.background }}>
+      {/* 🎬 HEADER COM FAVORITO */}
+      <MovieHeader movie={movie}>
+        <FavoriteButton
+          active={favorite}
+          onPress={() =>
+            toggleFavorite({
+              id: movie.id,
+              title: movie.title,
+              poster: movie.poster_path,
+              rating: movie.vote_average,
+              releaseDate: movie.release_date,
+            })
+          }
+        />
+        
+      </MovieHeader>
 
       <View style={{ flex: 1 }}>
         <MovieTabs movie={movie} />

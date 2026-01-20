@@ -1,11 +1,28 @@
-import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
+import { View, Text, TouchableOpacity, StyleSheet, Alert } from "react-native";
+import { useState } from "react";
 import { useAuth } from "../hooks/useAuth";
-
 import { useThemeStyles } from "../theme/useThemeStyles";
+import { Loading } from "../components/Loading";
 
 export default function LoginScreen() {
-  const { signIn } = useAuth();
+  const { signIn, loading } = useAuth();
   const { colors } = useThemeStyles();
+  const [submitting, setSubmitting] = useState(false);
+
+  async function handleLogin() {
+    try {
+      setSubmitting(true);
+      await signIn();
+    } catch (error) {
+      Alert.alert("Erro ao entrar", "Não foi possível realizar o login.");
+    } finally {
+      setSubmitting(false);
+    }
+  }
+
+  if (loading) {
+    return <Loading />;
+  }
 
   return (
     <View style={[styles.container, { backgroundColor: colors.background }]}>
@@ -14,10 +31,16 @@ export default function LoginScreen() {
       </Text>
 
       <TouchableOpacity
-        style={[styles.button, { backgroundColor: colors.primary }]}
-        onPress={signIn}
+        style={[
+          styles.button,
+          { backgroundColor: colors.primary, opacity: submitting ? 0.7 : 1 },
+        ]}
+        onPress={handleLogin}
+        disabled={submitting}
       >
-        <Text style={styles.buttonText}>Entrar</Text>
+        <Text style={styles.buttonText}>
+          {submitting ? "Entrando..." : "Entrar"}
+        </Text>
       </TouchableOpacity>
     </View>
   );
